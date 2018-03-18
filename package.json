@@ -1,0 +1,22 @@
+{
+  "name": "js_canvas_map",
+  "version": "1.0.0",
+  "description": "map with canvas",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode development --config ./conf/webpack.js --display-error-details"
+  },
+  "author": "Emil Nicolaie Perhinschi",
+  "license": "SEE LICENSE IN licence.txt",
+  "devDependencies": {
+    "html-webpack-plugin": "^3.0.6",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12"
+  },
+  "dependencies": {}
+}
