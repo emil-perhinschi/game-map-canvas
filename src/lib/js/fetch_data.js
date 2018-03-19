@@ -1,9 +1,12 @@
 import { global_config } from "global_config.js"
+// import { read_image_to_map } from 'map_converter.js'
 
-const map_data = random_matrix(
-    global_config.full_map_width,
-    global_config.full_map_height
-)
+// const map_data = random_matrix(
+//     global_config.full_map_width,
+//     global_config.full_map_height
+// )
+
+const map_data = require("game_world_map.json")
 
 function fetch_data(type, options) {
     const dispatch_map = {

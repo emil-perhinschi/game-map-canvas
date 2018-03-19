@@ -1,14 +1,33 @@
 module.exports.global_config = {
-    "max_fps": 5,
-    "tile_width": 20,
-    "tile_height": 20,
-    "viewport_offset_x": 6,
-    "viewport_offset_y": 6,
-    "viewport_width": 10,
-    "viewport_height": 10,
-    "full_map_width": 100,
-    "full_map_height": 100
+    "max_fps": 15,
+    "tile_width": 10,
+    "tile_height": 10,
+    "viewport_offset_x": 0,
+    "viewport_offset_y": 0,
+    "viewport_width": 40,
+    "viewport_height": 40,
+    "full_map_width": 400,
+    "full_map_height": 400
 }
+
+module.exports.map_palette = [
+    "#17577e",
+    "#3d6c42",
+    "#3f6e42",
+    "#477340",
+    "#527b3e",
+    "#61853b",
+    "#729038",
+    "#8fa433",
+    "#afba2d",
+    "#b8c02b",
+    "#a9a62a",
+    "#8d7329",
+    "#754727",
+    "#6b3527",
+    "#83564a",
+    "#c3ada7"
+]
 //
 //
 // class GlobalConfig {
