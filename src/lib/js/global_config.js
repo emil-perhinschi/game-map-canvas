@@ -1,11 +1,11 @@
 module.exports.global_config = {
     "max_fps": 15,
-    "tile_width": 10,
-    "tile_height": 10,
+    "tile_width": 1,
+    "tile_height": 1,
     "viewport_offset_x": 0,
     "viewport_offset_y": 0,
-    "viewport_width": 41,
-    "viewport_height": 41,
+    "viewport_width": 341,
+    "viewport_height": 341,
     "full_map_width": 400,
     "full_map_height": 400
 }

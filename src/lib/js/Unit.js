@@ -11,8 +11,8 @@ class Unit {
     }
 
     move(global_config) {
-        this.x = global_config.viewport_offset_x + ( global_config.viewport_width  * global_config.tile_width  )/2
-        this.y = global_config.viewport_offset_y + ( global_config.viewport_height * global_config.tile_height )/2
+        this.x = global_config.viewport_offset_x + Math.floor(global_config.viewport_width/2)
+        this.y = global_config.viewport_offset_y + Math.floor(global_config.viewport_height/2)
     }
 
     draw(ctx, global_config) {
