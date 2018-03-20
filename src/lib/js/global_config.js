@@ -4,8 +4,8 @@ module.exports.global_config = {
     "tile_height": 10,
     "viewport_offset_x": 0,
     "viewport_offset_y": 0,
-    "viewport_width": 40,
-    "viewport_height": 40,
+    "viewport_width": 41,
+    "viewport_height": 41,
     "full_map_width": 400,
     "full_map_height": 400
 }

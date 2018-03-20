@@ -23,16 +23,19 @@ window.onload = function() {
             e.stopPropagation()
         }
     }
-
-    game_loop(ctx_viewport);
+    const unit_x = global_config.viewport_offset_x + global_config.viewport_width/2;
+    const unit_y = global_config.viewport_offset_y + global_config.viewport_height/2;
+    const unit = new Unit(unit_x, unit_y)
+    game_tick(ctx_viewport, unit);
     document.getElementById('map_container').focus()
 }
 
-function game_loop(ctx) {
+function game_tick(ctx, unit) {
 
     const viewport_map_data = update()
     draw_viewport(ctx, viewport_map_data);
-
+    unit.move(global_config)
+    
     const time = Date.now();
     const sec = Math.floor( time / 1000 );
     if ( sec != current_second ) {
@@ -50,17 +53,49 @@ function game_loop(ctx) {
             + global_config.viewport_offset_x
             + " "
             + global_config.viewport_offset_y,
+        10,30
+        )
+
+    ctx.fillText(
+        "Selected unit is at: "
+            + unit.x
+            + " "
+            + unit.y,
         10,40
         )
+
+    unit.draw(ctx, global_config)
+
+    ctx.beginPath()
+    ctx.moveTo(0,0)
+    ctx.lineTo(
+        global_config.viewport_width * global_config.tile_width,
+        global_config.viewport_height * global_config.tile_height
+    )
+    ctx.closePath()
+    ctx.stroke()
+
+    ctx.beginPath()
+    ctx.moveTo(
+        0,
+        global_config.viewport_height * global_config.tile_height
+    )
+    ctx.lineTo(
+        global_config.viewport_width * global_config.tile_width,
+        0)
+    ctx.closePath()
+    ctx.stroke()
+
     setTimeout(
         function() {
             window.requestAnimationFrame(
-                function() { game_loop(ctx) }
+                function() { game_tick(ctx, unit) }
             )
         },
         Math.ceil(1000/global_config.max_fps)
     )
 }
+
 
 function update() {
     return fetch_data(
