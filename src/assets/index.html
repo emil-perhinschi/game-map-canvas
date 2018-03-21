@@ -18,6 +18,8 @@
         border-width: thin;
         border-style: solid;
         border-color: black;
+        display: grid;
+        grid-template-columns: auto auto;
     }
     </style>
 </head>
@@ -31,7 +33,16 @@
             height="<%= htmlWebpackPlugin.options.viewport_height %>"
         ></canvas>
     </div>
-    <div id="unit_list"> unit list [todo]
+    <div id="context_info">
+        <div id="commands">
+            <input type="button" onclick="start_game()" value="Start"/>
+            <input type="button" onclick="stop_game()" value="Stop"/>
+            <input type="button" onclick="reset_game()" value="Reset"/>
+        </div>
+        <div id="unit_list"> unit list
+        </div>
+        <div id="console">
+        </div>
     </div>
     <div id="help">
         <p>Movement keys: arrow keys in numpad, moves in all 8 directions.</p>
