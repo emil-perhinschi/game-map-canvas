@@ -1,4 +1,6 @@
 const sprites = require('./sprites.js').sprites
+const map_data = require('mock_server_data.js').map_data
+const tile_is_walkable = require('mock_server_data.js').tile_is_walkable
 
 class Unit {
     constructor(id, x, y) {
@@ -13,27 +15,51 @@ class Unit {
     }
 
     move(store, direction) {
-        const can_N = () => this.y > 0
-        const can_S = () => this.y < ( store.full_map_height - 1 )
-        const can_E = () => this.x < ( store.full_map_width  - 1 )
-        const can_W = () => this.x > 0
+        const can_N = (store, x,y) => y > 0
+        const can_S = (store, x,y) => y < ( store.full_map_height - 1 )
+        const can_E = (store, x,y) => x < ( store.full_map_width  - 1 )
+        const can_W = (store, x,y) => x > 0
 
+        // store the new values before checking if movement is possible
         const move_directions = {
-            "N": () => can_N() && this.y--,
-            "S": () => can_S() && this.y++,
-            "E": () => can_E() && this.x++,
-            "W": () => can_W() && this.x--,
-            "NE": () => can_N() && can_E() && this.y-- && this.x++,
-            "NW": () => can_N() && can_W() && this.y-- && this.x--,
-            "SE": () => can_S() && can_E() && this.y++ && this.x++,
-            "SW": () => can_S() && can_W() && this.y++ && this.x--
+            "N": function(store,x,y) { if ( can_N(store,x,y) ) return [ x, y - 1 ] },
+            "S": function(store,x,y) { if ( can_S(store,x,y) ) return [ x, y + 1 ] },
+            "E": function(store,x,y) { if ( can_E(store,x,y) ) return [ x + 1, y ] },
+            "W": function(store,x,y) { if ( can_W(store,x,y) ) return [ x - 1, y ] },
+            "NE": function(store,x,y) {
+                if ( can_N(store,x,y) && can_E(store,x,y) ) {
+                    return [ x + 1, y - 1]
+                }
+            },
+            "NW": function(store,x,y) {
+                if ( can_N(store,x,y) && can_W(store,x,y) ) {
+                    return [ x - 1, y - 1]
+                }
+            },
+            "SE": function(store,x,y) {
+                if ( can_S(store,x,y) && can_E(store,x,y) ) {
+                    return [ x + 1, y + 1]
+                }
+            },
+            "SW": function(store,x,y) {
+                if ( can_S(store,x,y) && can_W(store,x,y) ) {
+                    return [ x - 1, y + 1 ]
+                }
+            }
         }
 
         if(!direction in move_directions) {
             throw "Direction " + direction + " not valid"
         }
 
-        move_directions[direction]()
+        const [ new_x, new_y ] = move_directions[direction](store,this.x,this.y)
+        const can_move = tile_is_walkable(map_data, new_x, new_y)
+        if (can_move.success == true) {
+            this.x = new_x
+            this.y = new_y
+        } else {
+            console.log( "cannot move there: " + can_move.reason )
+        }
     }
 
     draw(ctx, store) {
@@ -49,7 +75,6 @@ class Unit {
         // ctx.closePath()
         // ctx.fill()
         const unit_image = new Image(64,64)
-        console.log(sprites.cart)
         unit_image.src = sprites.cart
         ctx.drawImage(unit_image, draw_coords.x, draw_coords.y)
         const shield_image = new Image(64,64)

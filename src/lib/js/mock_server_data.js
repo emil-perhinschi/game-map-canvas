@@ -52,4 +52,18 @@ function random_matrix( x_count, y_count) {
         )
     )
 }
-export { fetch_data, map_data }
+
+function tile_is_walkable(map_data, x, y) {
+    // if not sea or high mountain
+    if ( map_data[y][x] < 1 ) {
+        return { success: false, reason: "cannot walk on water" }
+    }
+
+    if ( map_data[y][x] > 12 ) {
+        return { success: false, reason: "these mountains are impassable" }
+    }
+
+    return { success: true, reason: "good ground for walking" }
+}
+
+export { fetch_data, map_data, tile_is_walkable }

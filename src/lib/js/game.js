@@ -1,6 +1,8 @@
+'use strict';
+
 import { Map } from 'Map.js'
 import { Unit } from 'Unit.js'
-import { fetch_data, map_data } from 'fetch_data.js'
+import { fetch_data, map_data, tile_is_walkable } from 'mock_server_data.js'
 import { keyboard_shortcuts } from 'keyboard_shortcuts.js'
 import { store, map_palette } from 'globals.js'
 import utils from 'misc_not_mine.js'
@@ -19,11 +21,25 @@ window.onload = function() {
     }
 
     // mock some units
-    for (let unit_id = 0; unit_id < 10; unit_id++ ) {
+    let unit_id = 0;
+    let count = 0;
+    while ( unit_id < 10 ) {
         const x = utils.get_random_int(store.full_map_width)
         const y = utils.get_random_int(store.full_map_height)
-        store.units[unit_id.toString()] = new Unit(unit_id, x, y)
+
+        // only generate unit if in the low lands
+        const map_check = tile_is_walkable(map_data, x, y)
+        if ( map_check.success == true) {
+            store.units[unit_id] = new Unit(unit_id, x, y)
+            unit_id += 1
+        }
+        count++
+        if (count > 400) {
+            break
+        }
     }
+
+    console.log("units generated: ", store.units)
 
     game_tick(ctx_viewport, store);
     document.getElementById('map_container').focus()
