@@ -1,8 +1,11 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
 const path = require('path')
 const store  = require("./../src/lib/js/globals.js").store
 const fs = require('fs')
 const read_image_to_map = require('./../src/lib/js/map_converter.js').read_image_to_map
+const sprites = require('./../src/lib/js/sprites.js').sprites
 
 const map_image_path = path.resolve(
     __dirname
@@ -33,6 +36,13 @@ const web_config = {
         ]
     },
     plugins: [
+        new CopyWebpackPlugin([
+            {
+                from: "src/assets/static/sprites/*.png",
+                to: 'icons/',
+                flatten: true
+            }
+        ]),
         new HtmlWebpackPlugin({
             title: 'My Map v.0.1.2',
             template: path.resolve(__dirname + '/../src/assets/index.html'),
@@ -42,7 +52,7 @@ const web_config = {
             viewport_height: (store.viewport_height * store.tile_height)
         })
     ]
-};
+}
 
 const test = {
     target: "node",
@@ -59,4 +69,4 @@ const test = {
     },
 }
 
-module.exports = [ web_config, test ]
+module.exports = [ web_config , test]

@@ -1,4 +1,3 @@
-
 const frames = {
     "current_second": 0,
     "frame_count": 0,

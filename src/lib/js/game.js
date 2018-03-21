@@ -10,9 +10,7 @@ window.onload = function() {
     const ctx_viewport = document.getElementById('game').getContext("2d")
 
     document.onkeydown = function (e) {
-        console.log(e.key)
         const move_keys = keyboard_shortcuts;
-
         if (e.key in move_keys) {
             move_keys[e.key]()
             e.preventDefault()
