@@ -47,9 +47,9 @@ class Unit {
 
         if (
                 (this.x < viewport_min_x + min_distance_from_edges)
-                || (this.x > viewport_max_x - min_distance_from_edges)
+                || (this.x > viewport_max_x - min_distance_from_edges - 1)
                 || (this.y < viewport_min_y + min_distance_from_edges)
-                || (this.y > viewport_max_y - min_distance_from_edges)
+                || (this.y > viewport_max_y - min_distance_from_edges - 1)
             ) {
                 return false
         }
