@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <style>
     #map_container {
         display: grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: auto 100px auto;
         width: auto;
     }
 
     #map_container div {
         margin: 5px;
+    }
+
+    #unit_list {
+        border-width: thin;
+        border-style: solid;
+        border-color: black;
     }
     </style>
 </head>
@@ -26,13 +31,14 @@
             height="<%= htmlWebpackPlugin.options.viewport_height %>"
         ></canvas>
     </div>
-    <div> movement keys like in vi
-        <dl>
-            <dt>j</dt> <dd>move down</dd>
-            <dt>k</dt> <dd>move up</dd>
-            <dt>h</dt> <dd>move left</dd>
-            <dt>l</dt> <dd>move right</dd>
-        </dl>
+    <div id="unit_list"> unit list [todo]
+    </div>
+    <div id="help">
+        <p>Movement keys: arrow keys in numpad, moves in all 8 directions.</p>
+        <p>"c": centers the viewport on the selected units</p>
+        <p>Nothing much works right now, only the map and moving one unit
+            (that is the black dot) on the map </p>
+        <p>Reloading the page resets the position of the selected unit</p>
     <div>
 </div>
 </body>

@@ -11,11 +11,20 @@ class Unit {
     }
 
     move(store, direction) {
+        const can_N = () => this.y > 0
+        const can_S = () => this.y < ( store.full_map_height - 1 )
+        const can_E = () => this.x < ( store.full_map_width  - 1 )
+        const can_W = () => this.x > 0
+
         const move_directions = {
-            "N": () => (this.y > 0) && this.y--,
-            "S": () => ( this.y < store.full_map_height - 1) && this.y++,
-            "E": () => ( this.x < store.full_map_width - 1) && this.x++,
-            "W": () => ( this.x > 0) && this.x--
+            "N": () => can_N() && this.y--,
+            "S": () => can_S() && this.y++,
+            "E": () => can_E() && this.x++,
+            "W": () => can_W() && this.x--,
+            "NE": () => can_N() && can_E() && this.y-- && this.x++,
+            "NW": () => can_N() && can_W() && this.y-- && this.x--,
+            "SE": () => can_S() && can_E() && this.y++ && this.x++,
+            "SW": () => can_S() && can_W() && this.y++ && this.x--
         }
 
         if(!direction in move_directions) {

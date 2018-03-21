@@ -34,7 +34,7 @@ const web_config = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'My Map',
+            title: 'My Map v.0.1.2',
             template: path.resolve(__dirname + '/../src/assets/index.html'),
             full_map_width: (store.full_map_width * store.tile_width),
             full_map_height: (store.full_map_height * store.tile_height),
