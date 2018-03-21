@@ -1,36 +1,71 @@
 class Unit {
-    constructor(x, y) {
+    constructor(id, x, y) {
+        this.id = id
         this.x = x
         this.y = y
-        this.draw_x = 0
-        this.draw_y = 0
+        this.color_code = "#000000"
     }
 
     position() {
         return [this.x, this.y]
     }
 
-    move(global_config) {
-        this.x = global_config.viewport_offset_x + Math.floor(global_config.viewport_width/2)
-        this.y = global_config.viewport_offset_y + Math.floor(global_config.viewport_height/2)
+    move(store, direction) {
+        const move_directions = {
+            "N": () => (this.y > 0) && this.y--,
+            "S": () => ( this.y < store.full_map_height - 1) && this.y++,
+            "E": () => ( this.x < store.full_map_width - 1) && this.x++,
+            "W": () => ( this.x > 0) && this.x--
+        }
+
+        if(!direction in move_directions) {
+            throw "Direction " + direction + " not valid"
+        }
+
+        move_directions[direction]()
     }
 
-    draw(ctx, global_config) {
-        ctx.fillStyle = "#000000"
+    draw(ctx, store) {
 
-        this.draw_x = ( global_config.viewport_width  * global_config.tile_width  )/2
-        this.draw_y = ( global_config.viewport_height * global_config.tile_height )/2
-
+        ctx.fillStyle = this.color_code
+        const draw_coords = this.compute_draw_coordinates(store)
         ctx.beginPath()
         ctx.arc(
-            this.draw_x,
-            this.draw_y,
-            global_config.tile_width/2, 0, 2 * Math.PI
+            draw_coords.x + 0.5*store.tile_width,
+            draw_coords.y + 0.5*store.tile_height,
+            store.tile_width/2.5, 0, 2 * Math.PI
         )
         ctx.closePath()
-        ctx.stroke()
-
+        ctx.fill()
     }
+
+    unit_in_viewport( store, min_distance_from_edges ) {
+        const viewport_min_x = store.viewport_offset_x
+        const viewport_min_y = store.viewport_offset_y
+        const viewport_max_x = store.viewport_offset_x + store.viewport_width
+        const viewport_max_y = store.viewport_offset_y + store.viewport_height
+
+        if (
+                (this.x < viewport_min_x + min_distance_from_edges)
+                || (this.x > viewport_max_x - min_distance_from_edges)
+                || (this.y < viewport_min_y + min_distance_from_edges)
+                || (this.y > viewport_max_y - min_distance_from_edges)
+            ) {
+                return false
+        }
+        return true
+    }
+
+    // returns the coordinates of the tile where the unit should be drawn
+    //   if the unit figure is a circle add 0.5 of the tile_width
+    compute_draw_coordinates(store) {
+        return {
+            x: (this.x - store.viewport_offset_x) * store.tile_width,
+            y: (this.y - store.viewport_offset_y) * store.tile_height
+        }
+    }
+
+
 }
 
 export { Unit }

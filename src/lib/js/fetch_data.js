@@ -1,4 +1,4 @@
-import { global_config } from "global_config.js"
+import { global_config } from "globals.js"
 // import { read_image_to_map } from 'map_converter.js'
 
 // const map_data = random_matrix(

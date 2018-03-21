@@ -1,16 +1,32 @@
-module.exports.global_config = {
-    "max_fps": 15,
-    "tile_width": 10,
-    "tile_height": 10,
-    "viewport_offset_x": 0,
-    "viewport_offset_y": 0,
-    "viewport_width": 51,
-    "viewport_height": 51,
-    "full_map_width": 400,
-    "full_map_height": 400
+
+const frames = {
+    "current_second": 0,
+    "frame_count": 0,
+    "frames_last_second": 0
 }
 
-module.exports.map_palette = [
+const store = {
+    "frames": frames,
+    "max_fps": 5,
+    "tile_width": 64,
+    "tile_height": 64,
+    "viewport_offset_x": 0,
+    "viewport_offset_y": 0,
+    "viewport_width": 21,
+    "viewport_height": 21,
+    "full_map_width": 400,
+    "full_map_height": 400,
+    "units": [],
+    "selected_unit": {
+        "id": 0
+    },
+    "on_move" : function() {
+        throw( new Error("no on_move action was set in globals") )
+    }
+}
+module.exports.store = store
+
+const map_palette = [
     "#17577e",
     "#3d6c42",
     "#3f6e42",
@@ -28,6 +44,8 @@ module.exports.map_palette = [
     "#83564a",
     "#c3ada7"
 ]
+module.exports.map_palette = map_palette
+
 //
 //
 // class GlobalConfig {

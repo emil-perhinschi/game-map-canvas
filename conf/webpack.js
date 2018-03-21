@@ -1,6 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
-const global_config  = require("./../src/lib/js/global_config.js").global_config
+const store  = require("./../src/lib/js/globals.js").store
 const fs = require('fs')
 const read_image_to_map = require('./../src/lib/js/map_converter.js').read_image_to_map
 
@@ -36,10 +36,10 @@ const web_config = {
         new HtmlWebpackPlugin({
             title: 'My Map',
             template: path.resolve(__dirname + '/../src/assets/index.html'),
-            full_map_width: (global_config.full_map_width * global_config.tile_width),
-            full_map_height: (global_config.full_map_height * global_config.tile_height),
-            viewport_width: (global_config.viewport_width * global_config.tile_width),
-            viewport_height: (global_config.viewport_height * global_config.tile_height)
+            full_map_width: (store.full_map_width * store.tile_width),
+            full_map_height: (store.full_map_height * store.tile_height),
+            viewport_width: (store.viewport_width * store.tile_width),
+            viewport_height: (store.viewport_height * store.tile_height)
         })
     ]
 };
