@@ -1,36 +1,44 @@
 'use strict';
 
+const game_tick = require("motor.js").game_tick
+
 import { Map } from 'Map.js'
 import { Unit } from 'Unit.js'
-import { fetch_data, map_data, tile_is_walkable } from 'mock_server_data.js'
-import { keyboard_shortcuts } from 'keyboard_shortcuts.js'
-import { store, map_palette } from 'globals.js'
+import { map_data, tile_is_walkable } from 'mock_server_data.js'
+import { init_keyboard_shortcuts } from 'keyboard_shortcuts.js'
+import { store } from 'globals.js'
 import utils from 'misc_not_mine.js'
-import { viewport_center } from 'Viewport.js'
+
+
 
 window.onload = function() {
+
     const ctx_viewport = document.getElementById('game').getContext("2d")
+    document.getElementById('map_container').focus()
 
-    document.onkeydown = function (e) {
-        const move_keys = keyboard_shortcuts;
-        if (e.key in move_keys) {
-            move_keys[e.key]()
-            e.preventDefault()
-            e.stopPropagation()
-        }
-    }
+    document.onkeydown = keyboard_actions(store)
 
+    store.units = init_units(store)
+    console.log("units generated: ", store.units)
+
+    game_tick(ctx_viewport, store);
+}
+
+
+function init_units(my_store) {
+
+    const units = Array(10)
     // mock some units
     let unit_id = 0;
     let count = 0;
     while ( unit_id < 10 ) {
-        const x = utils.get_random_int(store.full_map_width)
-        const y = utils.get_random_int(store.full_map_height)
+        const x = utils.get_random_int(my_store.full_map_width)
+        const y = utils.get_random_int(my_store.full_map_height)
 
         // only generate unit if in the low lands
         const map_check = tile_is_walkable(map_data, x, y)
         if ( map_check.success == true) {
-            store.units[unit_id] = new Unit(unit_id, x, y)
+            units[unit_id] = new Unit(unit_id, x, y)
             unit_id += 1
         }
         count++
@@ -39,145 +47,16 @@ window.onload = function() {
         }
     }
 
-    console.log("units generated: ", store.units)
-
-    game_tick(ctx_viewport, store);
-    document.getElementById('map_container').focus()
+    return units;
 }
 
-function game_tick(ctx, store) {
-
-    const selected_unit = store.units[store.selected_unit.id]
-
-    if (!selected_unit.unit_in_viewport(store, 0)) {
-        viewport_center(store, selected_unit.x, selected_unit.y)
-    }
-
-    const viewport_map_data = update()
-    draw_viewport(ctx,store, viewport_map_data);
-    draw_units(ctx, store)
-    draw_fps(ctx, store)
-    draw_viewport_info(ctx, store)
-    ctx.fillStyle = "#000000"
-    ctx.font = "20px Arial";
-    ctx.fillText(
-        "Selected unit is at: "
-            + selected_unit.x
-            + " "
-            + selected_unit.y,
-        10,60
-        )
-
-    draw_diagonals(ctx, store)
-
-    setTimeout(
-        function() {
-            window.requestAnimationFrame(
-                function() { game_tick(ctx, store) }
-            )
-        },
-        Math.ceil(1000/store.max_fps)
-    )
-}
-
-function draw_units(ctx, store) {
-    store.units.map(
-        function (unit) {
-            // if( store.selected_unit.id === unit.id ) {
-            //     return false
-            // }
-            // unit = store.units[unit_id]
-            if (unit.unit_in_viewport(store, 0)) {
-                unit.draw(ctx, store)
-            }
-        }
-    )
-}
-
-function draw_fps(ctx, store) {
-    const time = Date.now();
-    const sec = Math.floor( time / 1000 );
-    if ( sec != store.frames.current_second ) {
-        store.frames.current_second = sec;
-        store.frames.frames_last_second = store.frames.frame_count;
-        store.frames.frame_count = 1;
-    } else {
-        store.frames.frame_count++;
-    }
-
-    ctx.fillStyle = "#000000";
-    ctx.font = "20px Arial";
-    ctx.fillText("FPS: " + store.frames.frames_last_second, 10, 20);
-}
-
-function draw_viewport_info(ctx, store) {
-    ctx.fillStyle = "#000000";
-    ctx.font = "20px Arial";
-    ctx.fillText(
-        "Offset: "
-            + store.viewport_offset_x
-            + " "
-            + store.viewport_offset_y,
-        10,40
-    )
-}
-
-
-
-
-function draw_diagonals(ctx, store) {
-    ctx.fillStyle = "#ff0000";
-    ctx.beginPath()
-    ctx.moveTo(0,0)
-    ctx.lineTo(
-        store.viewport_width * store.tile_width,
-        store.viewport_height * store.tile_height
-    )
-    ctx.closePath()
-    ctx.stroke()
-
-    ctx.beginPath()
-    ctx.moveTo(
-        0,
-        store.viewport_height * store.tile_height
-    )
-    ctx.lineTo(
-        store.viewport_width * store.tile_width,
-        0)
-    ctx.closePath()
-    ctx.stroke()
-
-}
-
-function update() {
-    return fetch_data(
-        "map_data",
-        {
-            "start_x": store.viewport_offset_x,
-            "start_y": store.viewport_offset_y,
-            "viewport_width": store.viewport_width,
-            "viewport_height": store.viewport_height
-        }
-    )
-}
-
-function draw_viewport( ctx, store, map_data) {
-
-    if ( ctx == null) { return; }
-
-    for (let y = 0; y < store.viewport_height; y++) {
-        for (let x = 0; x < store.viewport_width; x++) {
-
-            ctx.fillStyle = "#ffffff" // default is white
-            if (y in map_data && x in map_data[y]) {
-                ctx.fillStyle = map_palette[map_data[y][x]]
-            }
-            ctx.fillRect(
-                x * store.tile_width,
-                y * store.tile_height,
-                store.tile_width,
-                store.tile_height
-            );
+function keyboard_actions(my_store) {
+    return function (e) {
+        const move_keys = init_keyboard_shortcuts(my_store);
+        if (e.key in move_keys) {
+            move_keys[e.key]()
+            e.preventDefault()
+            e.stopPropagation()
         }
     }
 }

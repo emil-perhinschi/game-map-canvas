@@ -1,6 +1,9 @@
-import { global_config } from "globals.js"
-// import { read_image_to_map } from 'map_converter.js'
+/*
+ * pretend we have a server
+*/
 
+// import { global_config } from "globals.js"
+// import { read_image_to_map } from 'map_converter.js'
 // const map_data = random_matrix(
 //     global_config.full_map_width,
 //     global_config.full_map_height
@@ -66,4 +69,19 @@ function tile_is_walkable(map_data, x, y) {
     return { success: true, reason: "good ground for walking" }
 }
 
-export { fetch_data, map_data, tile_is_walkable }
+
+// pretend we load visible map from the server
+function update(offset_x, offset_y, width, height ) {
+
+    return fetch_data(
+        "map_data",
+        {
+            "start_x": offset_x,
+            "start_y": offset_y,
+            "viewport_width": width,
+            "viewport_height": height
+        }
+    )
+}
+
+export { fetch_data, map_data, tile_is_walkable, update }
