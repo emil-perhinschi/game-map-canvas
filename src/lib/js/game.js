@@ -10,15 +10,20 @@ import {
 } from 'ui.js'
 import { store, game_state } from 'globals.js'
 import utils from 'misc_not_mine.js'
+import { now_formatted } from 'util.js'
 
 window.onload = function() {
+
+// SEEME TODO
+// http://nokarma.org/2011/02/02/javascript-game-development-the-game-loop/index.html
+// https://developer.mozilla.org/en-US/docs/Games/Anatomy
 
     const ctx_viewport = document.getElementById('game').getContext("2d")
 
     document.onkeydown = keyboard_actions(store, game_state)
     init_ui_button_actions(window, store, game_state)
     store.units = init_units(store)
-    console.log("units generated: ", store.units)
+    ui_msg("units generated: ", JSON.stringify(store.units))
     game_tick(ctx_viewport, store, game_state);
 
     // will get here, the next tick is called via setTimeout
@@ -63,4 +68,15 @@ function keyboard_actions(my_store, game_state) {
             e.stopPropagation()
         }
     }
+}
+
+window.ui_msg = function (...args) {
+    const console_el = document.getElementById('console_area')
+    console_el.innerHTML =
+        "<div class='messages_item'>"
+        + now_formatted()
+        + " "
+        + args.join(" ")
+        + '</div>'
+        + console_el.innerHTML
 }

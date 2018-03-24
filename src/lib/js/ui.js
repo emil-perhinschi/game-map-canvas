@@ -44,16 +44,16 @@ function init_ui_button_actions(window, my_store, game_state) {
 
 function saves_list() {
     const saves_list = JSON.parse(localStorage.getItem(saves_list_name))
-    console.log(saves_list)
+    ui_msg(saves_list)
 }
 
 function game_load(my_store, id) {
     my_store = JSON.parse(localStorage.getItem("save_game_" + String(id)));
-    console.log("loading " + 1, my_store)
+    ui_msg("loading " + 1, my_store)
 }
 
 function game_save(my_store, id) {
-    console.log(my_store)
+    ui_msg(my_store)
     const save_id = "save_game_" + String(id)
     localStorage.setItem(save_id, JSON.stringify(my_store))
 
@@ -70,7 +70,7 @@ function game_save(my_store, id) {
                     return false
                 })
 
-        console.log('+++', saves_list, uniques)
+        ui_msg('+++', saves_list, uniques)
 
         localStorage.setItem(saves_list_name, JSON.stringify(uniques))
     } else {
@@ -79,21 +79,21 @@ function game_save(my_store, id) {
 }
 
 function game_start(game_state) {
-    console.log("starting game")
+    ui_msg("starting game")
     game_state.paused = false
 }
 
 function game_stop() {
-    console.log("quitting game")
+    ui_msg("quitting game")
 }
 
 function game_pause(game_state) {
-    console.log("pausing game")
+    ui_msg("pausing game")
     game_state.paused = true
 }
 
 function game_reset() {
-    console.log("resetting game")
+    ui_msg("resetting game")
 }
 
 export {

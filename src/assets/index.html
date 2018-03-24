@@ -21,6 +21,17 @@
         display: grid;
         grid-template-columns: auto auto;
     }
+
+    #console_area {
+        overflow: auto;
+        font-size: 8pt;
+        width: 250px;
+        height: 300px;
+    }
+    .messages_item {
+        border-left: 2px solid black;
+        margin: 2px;
+    }
     </style>
 </head>
 
@@ -45,7 +56,8 @@
         </div>
         <div id="unit_list"> unit list
         </div>
-        <div id="console">
+        <div id="console_area">
+
         </div>
     </div>
     <div id="help">

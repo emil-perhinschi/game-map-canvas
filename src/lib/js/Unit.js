@@ -58,7 +58,7 @@ class Unit {
             this.x = new_x
             this.y = new_y
         } else {
-            console.log( "cannot move there: " + can_move.reason )
+            ui_msg( "cannot move there: " + can_move.reason )
         }
     }
 

@@ -21,7 +21,7 @@ function game_tick(ctx, store, game_state) {
     draw_units(ctx, store)
 
     if ( game_state.paused === true ) {
-        console.log("game paused")
+        ui_msg("game paused")
         // check every second if the game was unpaused
         game_paused_check(ctx, store, game_state)
     } else {
