@@ -4,7 +4,8 @@ const frames = {
     "frames_last_second": 0
 }
 
-const store = {
+// ... need to replace this, can't make it const
+module.exports.store = {
     "frames": frames,
     "max_fps": 5,
     "tile_width": 64,
@@ -23,8 +24,14 @@ const store = {
         throw( new Error("no on_move action was set in globals") )
     }
 }
-module.exports.store = store
 
+module.exports.debug_info = {
+    "show": true
+}
+
+module.exports.game_state = {
+    "paused": false
+}
 const map_palette = [
     "#17577e",
     "#3d6c42",

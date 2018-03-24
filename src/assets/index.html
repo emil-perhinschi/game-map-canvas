@@ -6,7 +6,7 @@
     <style>
     #map_container {
         display: grid;
-        grid-template-columns: auto 100px auto;
+        grid-template-columns: auto 250px auto;
         width: auto;
     }
 
@@ -35,9 +35,13 @@
     </div>
     <div id="context_info">
         <div id="commands">
-            <input type="button" onclick="start_game()" value="Start"/>
-            <input type="button" onclick="stop_game()" value="Stop"/>
-            <input type="button" onclick="reset_game()" value="Reset"/>
+            <input type="button" onclick="game_start()" value="Start"/>
+            <input type="button" onclick="game_pause()" value="Pause"/>
+            <input type="button" onclick="game_load(2)" value="Load save_game_2"/>
+            <input type="button" onclick="game_load(1)" value="Load save_game_1"/>
+            <input type="button" onclick="game_save(1)" value="Save 1"/>
+            <input type="button" onclick="game_save(2)" value="Save 2"/>
+            <input type="button" onclick="saves_list()" value="List game saves"/>
         </div>
         <div id="unit_list"> unit list
         </div>

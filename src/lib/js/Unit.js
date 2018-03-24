@@ -66,20 +66,13 @@ class Unit {
 
         ctx.fillStyle = this.color_code
         const draw_coords = this.compute_draw_coordinates(store)
-        // ctx.beginPath()
-        // ctx.arc(
-        //     draw_coords.x + 0.5*store.tile_width,
-        //     draw_coords.y + 0.5*store.tile_height,
-        //     store.tile_width/2.5, 0, 2 * Math.PI
-        // )
-        // ctx.closePath()
-        // ctx.fill()
         const unit_image = new Image(64,64)
         unit_image.src = sprites.cart
         ctx.drawImage(unit_image, draw_coords.x, draw_coords.y)
         const shield_image = new Image(64,64)
         shield_image.src = sprites.shield
         ctx.drawImage(shield_image, draw_coords.x, draw_coords.y)
+        ctx.beginPath()
         ctx.rect(draw_coords.x, draw_coords.y, 64, 64)
         ctx.stroke()
     }
