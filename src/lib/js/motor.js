@@ -1,5 +1,7 @@
+'use strict'
+
 import { viewport_center } from 'Viewport.js'
-import { fetch_data, update} from 'mock_server_data.js'
+import {map_data, fetch_data, update} from 'mock_server_data.js'
 import { map_palette, debug_info } from 'globals.js'
 
 function game_tick(ctx, store, game_state) {
@@ -170,4 +172,95 @@ function draw_viewport( ctx, store, map_data) {
     }
 }
 
-export { game_tick }
+function world_map_draw(store) {
+    const center = {
+        x: store.units[store.selected_unit.id].x,
+        y: store.units[store.selected_unit.id].y
+    }
+    console.log("++center", center)
+
+    const zoom = store.world_map_zoom // how wide is the tile
+
+    const viewport = { // size in tiles
+        width: Math.floor(store.world_map_container_width / zoom),
+        height: Math.floor(store.world_map_container_height / zoom)
+    }
+    console.log("++viewport", viewport)
+
+    const offset = {
+        x: center.x - Math.floor(viewport.width/2),
+        y: center.y - Math.floor(viewport.height/2)
+    }
+
+    console.log("++offset", offset)
+
+    if (offset.x < 0) {
+        offset.x = 0
+    }
+
+    if (offset.y < 0) {
+        offset.y = 0
+    }
+
+    const world_map_data = fetch_data(
+        "world_map",
+        {
+            "start_x": offset.x,
+            "start_y": offset.y,
+            "viewport_width": viewport.width,
+            "viewport_height": viewport.height
+        }
+    )
+
+    console.log("++++++", viewport, offset, world_map_data)
+
+    const ctx = document.getElementById("world_map_canvas").getContext("2d")
+    for (let y = 0; y < viewport.height; y++) {
+        for (let x = 0; x < viewport.width; x++) {
+            ctx.fillStyle = "#ffffff" // default is white
+            if (y in world_map_data && x in world_map_data[y]) {
+                ctx.fillStyle = map_palette[world_map_data[y][x]]
+            }
+            ctx.fillRect(
+                x * zoom,
+                y * zoom,
+                1 * zoom,
+                1 * zoom
+            );
+        }
+    }
+
+    // draw unit position in the world map
+    // for debugging only, don't want to refresh the world map as often as
+    //    I refresh the viewport
+    // const unit_on_worldmap = {
+    //     x: (center.x - offset.x) * zoom,
+    //     y: (center.y - offset.y) * zoom
+    // }
+    // ctx.beginPath()
+    // ctx.strokeStyle = "#0000ff"
+    // ctx.rect(
+    //     unit_on_worldmap.x,
+    //     unit_on_worldmap.y,
+    //     zoom,
+    //     zoom
+    // )
+    // ctx.stroke()
+
+    // draw the contour of the viewport
+    const viewport_on_worldmap = {
+        x: (center.x - offset.x - Math.floor(store.viewport_width/2 )) * zoom,
+        y: (center.y - offset.y - Math.floor(store.viewport_height/2)) * zoom
+    }
+    ctx.beginPath()
+    ctx.strokeStyle = "#00ff00"
+    ctx.rect(
+        viewport_on_worldmap.x,
+        viewport_on_worldmap.y,
+        store.viewport_width  * zoom,
+        store.viewport_height * zoom
+    )
+    ctx.stroke()
+}
+
+export { game_tick, world_map_draw }

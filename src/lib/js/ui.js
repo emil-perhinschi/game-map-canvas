@@ -1,4 +1,5 @@
 import { viewport_center } from 'Viewport.js'
+import { world_map_draw } from "motor.js"
 
 function init_keyboard_shortcuts(my_store) {
     return {
@@ -40,7 +41,27 @@ function init_ui_button_actions(window, my_store, game_state) {
     window.game_pause = () => game_pause(game_state)
     window.game_reset = () => game_reset()
     window.saves_list = () => saves_list()
+    window.zoom_out = () => zoom_out(my_store)
+    window.zoom_in = () => zoom_in(my_store)
 }
+
+function zoom_in(my_store) {
+    if (my_store.world_map_zoom >= 4) {
+        return false;
+    }
+
+    my_store.world_map_zoom += 1
+    world_map_draw(my_store)
+}
+
+function zoom_out(my_store) {
+    if (my_store.world_map_zoom <= 1) {
+        return false;
+    }
+    my_store.world_map_zoom -= 1
+    world_map_draw(my_store)
+}
+
 
 function saves_list() {
     const saves_list = JSON.parse(localStorage.getItem(saves_list_name))

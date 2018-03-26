@@ -12,10 +12,15 @@ module.exports.store = {
     "tile_height": 64,
     "viewport_offset_x": 0,
     "viewport_offset_y": 0,
-    "viewport_width": 13,
-    "viewport_height": 13,
-    "full_map_width": 400,
-    "full_map_height": 400,
+    "viewport_width": 13,// in tiles
+    "viewport_height": 13,// in tiles
+    "full_map_width": 400,// in tiles
+    "full_map_height": 400,// in tiles
+    "world_map_width": 400,// in tiles
+    "world_map_height": 400, // in tiles
+    "world_map_container_width": 400, // in pixels
+    "world_map_container_height": 400, // in pixels
+    "world_map_zoom": 10, // how many pixels per tile in the world map container
     "units": [],
     "selected_unit": {
         "id": 0

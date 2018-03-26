@@ -4,14 +4,43 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <style>
-    #map_container {
+    #ui_container {
         display: grid;
+        grid-template-rows: 50px auto
         grid-template-columns: auto 250px auto;
         width: auto;
     }
 
-    #map_container div {
+    #ui_container div {
         margin: 5px;
+    }
+
+    #commands {
+        grid-column:1;
+        grid-row: 1;
+    }
+
+    #zoom {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    #map_container {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    #world_map {
+        grid-column: 2;
+        grid-row: 2;
+        border: 1px solid blue;
+        width: 400px;
+        height: 400px;
+    }
+
+    #context_info {
+        grid-row:3;
+        grid-column:2
     }
 
     #unit_list {
@@ -23,37 +52,56 @@
     }
 
     #console_area {
+        grid-row: 3;
+        grid-column: 2;
         overflow: auto;
         font-size: 8pt;
         width: 250px;
         height: 300px;
     }
+
     .messages_item {
         border-left: 2px solid black;
         margin: 2px;
+    }
+
+    #help {
+        grid-row: 2;
+        grid-column: 3;
     }
     </style>
 </head>
 
 <body>
-<div id="map_container">
-    <div>
+<div id="ui_container">
+    <div id="commands">
+        <input type="button" onclick="game_start()" value="Start"/>
+        <input type="button" onclick="game_pause()" value="Pause"/>
+        <input type="button" onclick="game_load(2)" value="Load save_game_2"/>
+        <input type="button" onclick="game_load(1)" value="Load save_game_1"/>
+        <input type="button" onclick="game_save(1)" value="Save 1"/>
+        <input type="button" onclick="game_save(2)" value="Save 2"/>
+        <input type="button" onclick="saves_list()" value="List game saves"/>
+    </div>
+    <div id="zoom">
+        <input type="button" onclick="zoom_out()" value="Zoom out"/>
+        <input type="button" onclick="zoom_in()" value="Zoom in"/>
+    </div>
+    <div id="map_container">
         <canvas
             id="game"
             width="<%= htmlWebpackPlugin.options.viewport_width %>"
             height="<%= htmlWebpackPlugin.options.viewport_height %>"
         ></canvas>
     </div>
+    <div id="world_map">
+        <canvas
+            id="world_map_canvas"
+            width="<%= htmlWebpackPlugin.options.world_map_width %>"
+            height="<%= htmlWebpackPlugin.options.world_map_height %>"
+        ></canvas>
+    </div>
     <div id="context_info">
-        <div id="commands">
-            <input type="button" onclick="game_start()" value="Start"/>
-            <input type="button" onclick="game_pause()" value="Pause"/>
-            <input type="button" onclick="game_load(2)" value="Load save_game_2"/>
-            <input type="button" onclick="game_load(1)" value="Load save_game_1"/>
-            <input type="button" onclick="game_save(1)" value="Save 1"/>
-            <input type="button" onclick="game_save(2)" value="Save 2"/>
-            <input type="button" onclick="saves_list()" value="List game saves"/>
-        </div>
         <div id="unit_list"> unit list
         </div>
         <div id="console_area">

@@ -46,9 +46,9 @@ const web_config = {
         new HtmlWebpackPlugin({
             title: 'My Map v.0.1.2',
             template: path.resolve(__dirname + '/../src/assets/index.html'),
-            full_map_width: (store.full_map_width * store.tile_width),
-            full_map_height: (store.full_map_height * store.tile_height),
-            viewport_width: (store.viewport_width * store.tile_width),
+            world_map_width:  store.world_map_width,
+            world_map_height: store.world_map_height,
+            viewport_width:  (store.viewport_width * store.tile_width),
             viewport_height: (store.viewport_height * store.tile_height)
         })
     ]

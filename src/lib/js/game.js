@@ -1,6 +1,9 @@
 'use strict';
 
-import { game_tick } from "motor.js"
+import {
+    game_tick,
+    world_map_draw
+} from "motor.js"
 import { Map } from 'Map.js'
 import { Unit } from 'Unit.js'
 import { map_data, tile_is_walkable } from 'mock_server_data.js'
@@ -24,6 +27,7 @@ window.onload = function() {
     init_ui_button_actions(window, store, game_state)
     store.units = init_units(store)
     ui_msg("units generated: ", JSON.stringify(store.units))
+    world_map_draw(store)
     game_tick(ctx_viewport, store, game_state);
 
     // will get here, the next tick is called via setTimeout

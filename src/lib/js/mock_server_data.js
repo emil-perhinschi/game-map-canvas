@@ -14,10 +14,18 @@ const map_data = require("game_world_map.json")
 function fetch_data(type, options) {
     const dispatch_map = {
         "map_data": function() { return mock_map_data(map_data, options) },
-        "user_data": function() { return mock_user_data(options) }
+        "user_data": function() { return mock_user_data(options) },
+        "world_map": function() { return mock_world_data(map_data, options)}
     }
 
     return dispatch_map[type]()
+}
+
+function mock_world_data(map_data, options) {
+    // mocking for now, when using a server will do something else
+    // probably get a lot less info since the world map data will contain
+    // less information, only towns probably
+    return mock_map_data(map_data, options)
 }
 
 function mock_map_data(original_map_data, options) {

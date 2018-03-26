@@ -1,10 +1,12 @@
+import { world_map_draw } from 'motor.js'
+
 class Viewport {
     constructor() {
 
     }
 }
 
-module.exports.Viewport = Viewport
+
 
 function viewport_center(store, x, y) {
 
@@ -25,6 +27,8 @@ function viewport_center(store, x, y) {
         : y_new > offset_y_max
             ? offset_y_max
             : y_new
+
+    world_map_draw(store)
 }
 
-module.exports.viewport_center = viewport_center
+export { Viewport, viewport_center }
