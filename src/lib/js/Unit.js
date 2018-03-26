@@ -1,4 +1,3 @@
-const sprites = require('./sprites.js').sprites
 const map_data = require('mock_server_data.js').map_data
 const tile_is_walkable = require('mock_server_data.js').tile_is_walkable
 
@@ -63,15 +62,21 @@ class Unit {
     }
 
     draw(ctx, store) {
-
+        ctx.imageSmoothingEnabled = true
         ctx.fillStyle = this.color_code
         const draw_coords = this.compute_draw_coordinates(store)
-        const unit_image = new Image(64,64)
-        unit_image.src = sprites.cart
-        ctx.drawImage(unit_image, draw_coords.x, draw_coords.y)
-        const shield_image = new Image(64,64)
-        shield_image.src = sprites.shield
-        ctx.drawImage(shield_image, draw_coords.x, draw_coords.y)
+        const unit_image = store.sprites.cart
+        ctx.drawImage(
+            unit_image,
+            draw_coords.x, draw_coords.y,
+            store.tile_width, store.tile_height
+        )
+        const shield_image = store.sprites.shield
+        ctx.drawImage(
+            shield_image,
+            draw_coords.x, draw_coords.y,
+            store.tile_width, store.tile_height
+        )
         ctx.beginPath()
         ctx.rect(draw_coords.x, draw_coords.y, 64, 64)
         ctx.stroke()

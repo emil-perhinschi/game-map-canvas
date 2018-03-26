@@ -15,6 +15,8 @@ import { store, game_state } from 'globals.js'
 import utils from 'misc_not_mine.js'
 import { now_formatted } from 'util.js'
 
+store.sprites = make_sprites()
+
 window.onload = function() {
 
 // SEEME TODO
@@ -83,4 +85,17 @@ window.ui_msg = function (...args) {
         + args.join(" ")
         + '</div>'
         + console_el.innerHTML
+}
+
+function make_sprites() {
+    const shield = new Image(64,64)
+    shield.src = 'sprites/blank_shield.png'
+
+    const cart = new Image(64,64)
+    cart.src = 'sprites/small_cart.png'
+
+    return {
+        "shield": shield,
+        "cart": cart
+    }
 }

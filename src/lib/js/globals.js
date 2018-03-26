@@ -6,6 +6,7 @@ const frames = {
 
 // ... need to replace this, can't make it const
 module.exports.store = {
+    "sprites": {},
     "frames": frames,
     "max_fps": 5,
     "tile_width": 64,

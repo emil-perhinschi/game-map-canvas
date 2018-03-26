@@ -46,7 +46,7 @@ function init_ui_button_actions(window, my_store, game_state) {
 }
 
 function zoom_in(my_store) {
-    if (my_store.world_map_zoom >= 4) {
+    if (my_store.world_map_zoom >= 10) {
         return false;
     }
 
@@ -55,7 +55,7 @@ function zoom_in(my_store) {
 }
 
 function zoom_out(my_store) {
-    if (my_store.world_map_zoom <= 1) {
+    if (my_store.world_map_zoom <= 2) {
         return false;
     }
     my_store.world_map_zoom -= 1
@@ -115,6 +115,13 @@ function game_pause(game_state) {
 
 function game_reset() {
     ui_msg("resetting game")
+}
+
+function build_units_list(container_id = "units_list") {
+    const container = document.getElementById(container_id)
+    if (container === undefined ) {
+        throw "could not find the unit list container"
+    }
 }
 
 export {

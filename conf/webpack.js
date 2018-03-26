@@ -5,7 +5,6 @@ const path = require('path')
 const store  = require("./../src/lib/js/globals.js").store
 const fs = require('fs')
 const read_image_to_map = require('./../src/lib/js/map_converter.js').read_image_to_map
-const sprites = require('./../src/lib/js/sprites.js').sprites
 
 const map_image_path = path.resolve(
     __dirname
@@ -39,7 +38,7 @@ const web_config = {
         new CopyWebpackPlugin([
             {
                 from: "src/assets/static/sprites/*.png",
-                to: 'icons/',
+                to: 'sprites/',
                 flatten: true
             }
         ]),
