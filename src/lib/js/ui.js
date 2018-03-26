@@ -1,3 +1,5 @@
+'use strict'
+
 import { viewport_center } from 'Viewport.js'
 import { world_map_draw } from "motor.js"
 
@@ -117,14 +119,69 @@ function game_reset() {
     ui_msg("resetting game")
 }
 
-function build_units_list(container_id = "units_list") {
+function build_units_list(
+    store,
+    selected_unit_id,
+    container_id = "units_list") {
+
+    const units = store.units
     const container = document.getElementById(container_id)
-    if (container === undefined ) {
-        throw "could not find the unit list container"
+    if (!container) {
+        throw "could not find the unit list container '"+ container_id + "'"
     }
+
+    Array.from(
+        units,
+        function(unit) {
+            container.appendChild(
+                build_unit_list_item(
+                    store,
+                    unit,
+                    selected_unit_id
+                )
+            )
+        }
+    )
+}
+
+function build_unit_list_item(store, unit, selected_unit_id) {
+    const el_container = document.createElement("div")
+    el_container.classList.add("unit_selector_container")
+
+    const el = document.createElement("div")
+    el.id = "unit_id__" + unit.id
+    el.classList.add('unit_selector')
+    if (unit.id == selected_unit_id) {
+        el.classList.add('selected_unit_selector')
+    }
+
+    el.appendChild( store.sprites.shield.cloneNode(true) )
+
+    el.onclick = function () {
+        const old_selected_unit_id = store.selected_unit.id
+
+        document.getElementById("unit_id__" + old_selected_unit_id)
+            .classList.remove('selected_unit_selector')
+
+        store.selected_unit.id = unit.id
+        document.getElementById("unit_id__" + unit.id)
+            .classList.add("selected_unit_selector")
+
+        viewport_center(store, unit.x, unit.y)
+    }
+
+    el_container.appendChild(el)
+
+    const el_details = document.createElement("div")
+    el_details.classList.add("unit_selector_details")
+    el_details.innerHTML = unit.id + ": " + unit.x + " " + unit.y
+    el_container.appendChild(el_details)
+
+    return el_container
 }
 
 export {
     init_keyboard_shortcuts,
-    init_ui_button_actions
+    init_ui_button_actions,
+    build_units_list
 }

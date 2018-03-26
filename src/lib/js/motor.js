@@ -177,7 +177,6 @@ function world_map_draw(store) {
         x: store.units[store.selected_unit.id].x,
         y: store.units[store.selected_unit.id].y
     }
-    console.log("++center", center)
 
     const zoom = store.world_map_zoom // how wide is the tile
 
@@ -185,14 +184,11 @@ function world_map_draw(store) {
         width: Math.floor(store.world_map_container_width / zoom),
         height: Math.floor(store.world_map_container_height / zoom)
     }
-    console.log("++viewport", viewport)
 
     const offset = {
         x: center.x - Math.floor(viewport.width/2),
         y: center.y - Math.floor(viewport.height/2)
     }
-
-    console.log("++offset", offset)
 
     if (offset.x < 0) {
         offset.x = 0
@@ -211,8 +207,6 @@ function world_map_draw(store) {
             "viewport_height": viewport.height
         }
     )
-
-    console.log("++++++", viewport, offset, world_map_data)
 
     const ctx = document.getElementById("world_map_canvas").getContext("2d")
     for (let y = 0; y < viewport.height; y++) {

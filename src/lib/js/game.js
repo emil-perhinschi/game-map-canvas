@@ -9,7 +9,8 @@ import { Unit } from 'Unit.js'
 import { map_data, tile_is_walkable } from 'mock_server_data.js'
 import {
     init_keyboard_shortcuts,
-    init_ui_button_actions
+    init_ui_button_actions,
+    build_units_list
 } from 'ui.js'
 import { store, game_state } from 'globals.js'
 import utils from 'misc_not_mine.js'
@@ -27,7 +28,10 @@ window.onload = function() {
 
     document.onkeydown = keyboard_actions(store, game_state)
     init_ui_button_actions(window, store, game_state)
+
     store.units = init_units(store)
+    build_units_list(store, store.selected_unit.id, "units_list")
+
     ui_msg("units generated: ", JSON.stringify(store.units))
     world_map_draw(store)
     game_tick(ctx_viewport, store, game_state);
