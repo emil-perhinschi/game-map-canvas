@@ -57,7 +57,7 @@ function zoom_in(my_store) {
 }
 
 function zoom_out(my_store) {
-    if (my_store.world_map_zoom <= 2) {
+    if (my_store.world_map_zoom < 2) {
         return false;
     }
     my_store.world_map_zoom -= 1

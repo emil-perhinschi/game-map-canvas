@@ -8,10 +8,14 @@ const read_image_to_map = require('./../src/lib/js/map_converter.js').read_image
 
 const map_image_path = path.resolve(
     __dirname
-    + "/../src/assets/static/400x400_v2.pgm"
+    + "/../src/assets/static/1600x1600_v2.pgm"
 )
 
-const map_data = read_image_to_map(map_image_path)
+const map_data = read_image_to_map(
+    map_image_path,
+    1600 // world_map_width ... don't care about the height, only about how long is each row
+)
+
 fs.writeFile(
     path.resolve(__dirname + "/../src/lib/js/game_world_map.json"),
     JSON.stringify(map_data),

@@ -1,6 +1,9 @@
 const fs = require('fs');
 
-function read_image_to_map(map_image_path) {
+function read_image_to_map(
+    map_image_path,
+    world_map_width
+) {
 
     let lines = fs.readFileSync(
         map_image_path,
@@ -30,7 +33,7 @@ function read_image_to_map(map_image_path) {
 
     let map_data = new Array()
     while ( normalized_values.length > 0 ) {
-        map_data.push(normalized_values.splice(0, 400))
+        map_data.push(normalized_values.splice(0, world_map_width))
     }
     console.log("map length: ", map_data.length)
 

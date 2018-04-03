@@ -15,8 +15,8 @@ class Unit {
 
     move(store, direction) {
         const can_N = (store, x,y) => y > 0
-        const can_S = (store, x,y) => y < ( store.full_map_height - 1 )
-        const can_E = (store, x,y) => x < ( store.full_map_width  - 1 )
+        const can_S = (store, x,y) => y < ( store.world_map_height - 1 )
+        const can_E = (store, x,y) => x < ( store.world_map_width  - 1 )
         const can_W = (store, x,y) => x > 0
 
         // store the new values before checking if movement is possible
