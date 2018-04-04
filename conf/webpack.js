@@ -1,3 +1,4 @@
+'use strict'
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
@@ -33,6 +34,9 @@ const web_config = {
         path: path.resolve(__dirname + '/../dist')
     },
     resolve: {
+        alias: {
+            Style: path.resolve(__dirname + "/../src/lib/style"),
+        },
         modules: [
             path.resolve(__dirname + "/../src/lib/js"),
             "node_modules"
@@ -51,10 +55,27 @@ const web_config = {
             template: path.resolve(__dirname + '/../src/assets/index.html'),
             world_map_width:  store.world_map_width,
             world_map_height: store.world_map_height,
+            full_map_width:  store.full_map_width,
+            full_map_height: store.full_map_height,
             viewport_width:  (store.viewport_width * store.tile_width),
             viewport_height: (store.viewport_height * store.tile_height)
         })
-    ]
+    ],
+    module: {
+        rules: [
+            {
+                test:/\.css$/,
+                use:[
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' }
+                ]
+            },
+            {
+                test:/\.scss$/,
+                use:['style-loader','css-loader', 'sass-loader']
+            }
+        ]
+    }
 }
 
 const test = {

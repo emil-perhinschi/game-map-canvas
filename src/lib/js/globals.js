@@ -1,3 +1,5 @@
+'use strict'
+
 const frames = {
     "current_second": 0,
     "frame_count": 0,
@@ -15,16 +17,18 @@ module.exports.store = {
     "viewport_offset_y": 0,
     "viewport_width": 13,// in tiles
     "viewport_height": 13,// in tiles
-    "full_map_width": 1600,// in tiles
-    "full_map_height": 1600,// in tiles
+    "full_map_width": 600,// in tiles
+    "full_map_height": 600,// in tiles
     "world_map_width": 1600,// in tiles
     "world_map_height": 1600, // in tiles
-    "world_map_container_width": 1600, // in pixels
-    "world_map_container_height": 1600, // in pixels
-    "world_map_zoom": 10, // how many pixels per tile in the world map container
+    "world_map_container_width": 600, // in pixels
+    "world_map_container_height": 600, // in pixels
+    "world_map_zoom": 1, // how many pixels per tile in the world map container
     "units": [],
-    "selected_unit": {
-        "id": 0
+    "towns": [],
+    "selected_entity": {
+        "id" : 0,
+        "type" : "units" // by default the first unit is selected
     },
     "on_move" : function() {
         throw( new Error("no on_move action was set in globals") )
@@ -57,6 +61,30 @@ const map_palette = [
     "#c3ada7"
 ]
 module.exports.map_palette = map_palette
+
+
+// also see https://www.compart.com/en/unicode/block/U+1F700 for symbols for ores
+const icons = {
+    "ship":"𓊝",
+    "cart":"𓌝",
+    "trade post":"𓍝",
+    "agricultural worker":"𓀝",
+    "traveler":"𓀦",
+    "food worker":"𓀧",
+    "construction worker":"𓀨",
+    "human":"𓁷",
+    "scout":"𓂉",
+    "cattle":"𓃒",
+    "pigs":"𓃟",
+    "hunting area":"𓃹",
+    "hunting area water":"𓅮",
+    "turtle":"𓆉",
+    "fishing grounds":"𓆟",
+    "fields":"𓇦",
+    "pottery":"𓎶",
+    "home":"𓉤",
+    "settlement":"𓉮𓉮",
+}
 
 //
 //

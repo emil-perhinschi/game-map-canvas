@@ -6,15 +6,19 @@ import {
 } from "motor.js"
 import { Map } from 'Map.js'
 import { Unit } from 'Unit.js'
+import { Town } from 'Town.js'
 import { map_data, tile_is_walkable } from 'mock_server_data.js'
 import {
     init_keyboard_shortcuts,
     init_ui_button_actions,
-    build_units_list
+    build_entities_list
 } from 'ui.js'
 import { store, game_state } from 'globals.js'
 import utils from 'misc_not_mine.js'
 import { now_formatted } from 'util.js'
+
+require("mini.css/dist/mini-nord.css")
+require("Style/main.css")
 
 store.sprites = make_sprites()
 
@@ -30,14 +34,38 @@ window.onload = function() {
     init_ui_button_actions(window, store, game_state)
 
     store.units = init_units(store)
-    build_units_list(store, store.selected_unit.id, "units_list")
-
+    build_entities_list("units_list", store, "units", store.selected_entity.id )
     ui_msg("units generated: ", JSON.stringify(store.units))
+
+    store.towns = init_towns(store)
+    console.log(store.towns)
+    build_entities_list("towns_list", store, "towns", store.selected_entity.id )
+    ui_msg("towns generated: ", JSON.stringify(store.towns))
+
     world_map_draw(store)
     game_tick(ctx_viewport, store, game_state);
 
     // will get here, the next tick is called via setTimeout
     document.getElementById('map_container').focus()
+}
+
+function init_towns(my_store) {
+    const towns = Array(50)
+    let town_id = 0;
+    let count = 0;
+    while (town_id < towns.length) {
+        const x = utils.get_random_int(my_store.world_map_width)
+        const y = utils.get_random_int(my_store.world_map_height)
+        if (tile_is_walkable(map_data, x, y).success === true) {
+            towns[town_id] = new Town(town_id, x, y)
+            town_id += 1
+        }
+        count++
+        if (count > 400 ) {
+            break
+        }
+    }
+    return towns;
 }
 
 function init_units(my_store) {
@@ -46,7 +74,7 @@ function init_units(my_store) {
     // mock some units
     let unit_id = 0;
     let count = 0;
-    while ( unit_id < 10 ) {
+    while ( unit_id < units.length ) {
         const x = utils.get_random_int(my_store.full_map_width)
         const y = utils.get_random_int(my_store.full_map_height)
 

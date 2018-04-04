@@ -1,15 +1,16 @@
 'use strict'
 
 import { viewport_center } from 'Viewport.js'
-import {map_data, fetch_data, update} from 'mock_server_data.js'
+import { map_data, fetch_data, update } from 'mock_server_data.js'
 import { map_palette, debug_info } from 'globals.js'
 
 function game_tick(ctx, store, game_state) {
 
-    const selected_unit = store.units[store.selected_unit.id]
+    const selected_entity_type = store.selected_entity.type
+    const selected_entity = store[selected_entity_type][store.selected_entity.id]
 
-    if (!selected_unit.unit_in_viewport(store, 0)) {
-        viewport_center(store, selected_unit.x, selected_unit.y)
+    if (!selected_entity.visible_in_viewport(store, 0)) {
+        viewport_center(store, selected_entity.x, selected_entity.y)
     }
 
     const viewport_map_data = update(
@@ -21,6 +22,7 @@ function game_tick(ctx, store, game_state) {
 
     draw_viewport(ctx, store, viewport_map_data)
     draw_units(ctx, store)
+    draw_towns(ctx, store)
 
     if ( game_state.paused === true ) {
         ui_msg("game paused")
@@ -65,7 +67,7 @@ function draw_debug_info( ctx, store) {
     if (debug_info.show === true) {
         draw_fps(ctx, store)
         draw_viewport_info(ctx, store)
-        draw_selected_unit_info(ctx, store)
+        draw_selected_entity_info(ctx, store)
         draw_diagonals(ctx, store)
     }
 }
@@ -73,26 +75,38 @@ function draw_debug_info( ctx, store) {
 function draw_units(ctx, store) {
     store.units.map(
         function (unit) {
-            // if( store.selected_unit.id === unit.id ) {
+            // if( store.selected_entity["unit"].id === unit.id ) {
             //     return false
             // }
             // unit = store.units[unit_id]
-            if (unit.unit_in_viewport(store, 0)) {
+            if (unit.visible_in_viewport(store, 0)) {
                 unit.draw(ctx, store)
             }
         }
     )
 }
 
-function draw_selected_unit_info(ctx, store) {
-    const selected_unit = store.units[store.selected_unit.id]
+function draw_towns(ctx, store) {
+    store.towns.map(
+        function (town) {
+            if (town.visible_in_viewport(store, 0)) {
+                town.draw(ctx, store)
+            }
+        }
+    )
+}
+
+
+function draw_selected_entity_info(ctx, store) {
+    const selected_entity_type = store.selected_entity.type
+    const selected_entity = store[selected_entity_type][store.selected_entity.id]
     ctx.fillStyle = "#000000"
     ctx.font = "20px Arial";
     ctx.fillText(
-        "Selected unit is at: "
-            + selected_unit.x
+        "Selected " + selected_entity_type + " is at: "
+            + selected_entity.x
             + " "
-            + selected_unit.y,
+            + selected_entity.y,
         10,60
     )
 }
@@ -174,8 +188,8 @@ function draw_viewport( ctx, store, map_data) {
 
 function world_map_draw(store) {
     const center = {
-        x: store.units[store.selected_unit.id].x,
-        y: store.units[store.selected_unit.id].y
+        x: store[store.selected_entity.type][store.selected_entity.id].x,
+        y: store[store.selected_entity.type][store.selected_entity.id].y
     }
 
     const zoom = store.world_map_zoom // how wide is the tile
@@ -185,7 +199,7 @@ function world_map_draw(store) {
         height: Math.floor(store.world_map_container_height / zoom)
     }
 
-    const offset = {
+    const offset = { // in tiles
         x: center.x - Math.floor(viewport.width/2),
         y: center.y - Math.floor(viewport.height/2)
     }
@@ -224,23 +238,6 @@ function world_map_draw(store) {
         }
     }
 
-    // draw unit position in the world map
-    // for debugging only, don't want to refresh the world map as often as
-    //    I refresh the viewport
-    // const unit_on_worldmap = {
-    //     x: (center.x - offset.x) * zoom,
-    //     y: (center.y - offset.y) * zoom
-    // }
-    // ctx.beginPath()
-    // ctx.strokeStyle = "#0000ff"
-    // ctx.rect(
-    //     unit_on_worldmap.x,
-    //     unit_on_worldmap.y,
-    //     zoom,
-    //     zoom
-    // )
-    // ctx.stroke()
-
     // draw the contour of the viewport
     const viewport_on_worldmap = {
         x: (center.x - offset.x - Math.floor(store.viewport_width/2 )) * zoom,
@@ -255,6 +252,20 @@ function world_map_draw(store) {
         store.viewport_height * zoom
     )
     ctx.stroke()
+
+    // draw towns
+    store.towns.forEach(
+        function(town) {
+            if (town.in_viewport(offset, viewport)) {
+                ctx.fillStyle = "#FF0000"
+                ctx.fillRect(
+                    town.x - offset.x, town.y - offset.y,
+                    5, 5
+                )
+            }
+        }
+    )
+
 }
 
 export { game_tick, world_map_draw }

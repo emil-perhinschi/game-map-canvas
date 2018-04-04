@@ -1,0 +1,127 @@
+#ui_container {
+    display: grid;
+    grid-template-rows: 50px auto;
+    grid-template-columns: auto auto auto;
+    width: auto;
+}
+
+#ui_container > div {
+    margin: 5px;
+}
+
+#commands {
+    grid-column:1;
+    grid-row: 1;
+}
+
+#zoom {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#map_container {
+    grid-column: 1;
+    grid-row: 2/4;
+}
+
+#world_map {
+    grid-column: 2;
+    grid-row: 2;
+    border: 1px solid blue;
+    width: 600px;
+    height: 600px;
+}
+
+#context_info {
+    width: 400px;
+    grid-column: 3;
+    grid-row: 2;
+}
+
+#units_list {
+    border-width: thin;
+    border-style: solid;
+    border-color: black;
+    height: 300px;
+    overflow: auto;
+}
+
+#towns_list {
+    border-width: thin;
+    border-style: solid;
+    border-color: black;
+    height: 300px;
+    overflow: auto;
+}
+
+
+.units_selector_container {
+    display: grid;
+    grid-template-columns: 33px auto;
+}
+
+.units_selector {
+    font-size: xx-small;
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    margin: 2px;
+    grid-column: 1;
+}
+
+.units_selector img {
+    height: 29px;
+    width: 29px;
+}
+
+.selected_units_selector {
+    border: 1px solid red;
+}
+
+.units_selector_details {
+    grid-column: 2;
+    width: auto;
+}
+
+.towns_selector_container {
+    display: grid;
+    grid-template-columns: 33px auto;
+}
+
+.towns_selector {
+    font-size: xx-small;
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    margin: 2px;
+    grid-column: 1;
+}
+
+.towns_selector img {
+    height: 29px;
+    width: 29px;
+}
+
+.selected_towns_selector {
+    border: 1px solid red;
+}
+
+.towns_selector_details {
+    grid-column: 2;
+    width: auto;
+}
+
+
+#console_area {
+    grid-row: 3;
+    grid-column: 2;
+    overflow: auto;
+    font-size: 8pt;
+    width: auto;
+    height: 300px;
+}
+
+.messages_item {
+    border-left: 2px solid black;
+    margin: 2px;
+}

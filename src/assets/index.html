@@ -3,100 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <style>
-    #ui_container {
-        display: grid;
-        grid-template-rows: 50px auto
-        grid-template-columns: auto auto auto;
-        width: auto;
-    }
-
-    #ui_container > div {
-        margin: 5px;
-    }
-
-    #commands {
-        grid-column:1;
-        grid-row: 1;
-    }
-
-    #zoom {
-        grid-column: 2;
-        grid-row: 1;
-    }
-
-    #map_container {
-        grid-column: 1;
-        grid-row: 2/4;
-    }
-
-    #world_map {
-        grid-column: 2;
-        grid-row: 2;
-        border: 1px solid blue;
-        width: 800px;
-        height: 800px;
-    }
-
-    #context_info {
-        width: 400px;
-    }
-
-    #units_list {
-        border-width: thin;
-        border-style: solid;
-        border-color: black;
-        height: 300px;
-        overflow: auto;
-    }
-
-    .unit_selector_container {
-        display: grid;
-        grid-template-columns: 33px auto;
-    }
-
-    .unit_selector {
-        font-size: xx-small;
-        width: 30px;
-        height: 30px;
-        border: 1px solid black;
-        margin: 2px;
-        grid-column: 1;
-    }
-
-    .unit_selector img {
-        height: 29px;
-        width: 29px;
-    }
-
-    .selected_unit_selector {
-        border: 1px solid red;
-    }
-
-    .unit_selector_details {
-        grid-column: 2;
-        width: auto;
-    }
-
-    #console_area {
-        grid-row: 3;
-        grid-column: 2;
-        overflow: auto;
-        font-size: 8pt;
-        width: auto;
-        height: 300px;
-    }
-
-    .messages_item {
-        border-left: 2px solid black;
-        margin: 2px;
-    }
-
-    /* #help {
-        grid-row: 2;
-        grid-column: 3;
-    } */
-    </style>
 </head>
 
 <body>
@@ -124,11 +30,12 @@
     <div id="world_map">
         <canvas
             id="world_map_canvas"
-            width="<%= htmlWebpackPlugin.options.world_map_width %>"
-            height="<%= htmlWebpackPlugin.options.world_map_height %>"
+            width="<%= htmlWebpackPlugin.options.full_map_width %>"
+            height="<%= htmlWebpackPlugin.options.full_map_height %>"
         ></canvas>
     </div>
     <div id="context_info">
+        <div id="towns_list"></div>
         <div id="units_list"></div>
         <div id="console_area"></div>
     </div>

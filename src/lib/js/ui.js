@@ -5,29 +5,20 @@ import { world_map_draw } from "motor.js"
 
 function init_keyboard_shortcuts(my_store) {
     return {
-        "k": () => my_store.units[my_store.selected_unit.id].move(my_store, "N"),
-        "j": () => my_store.units[my_store.selected_unit.id].move(my_store, "S"),
-        "h": () => my_store.units[my_store.selected_unit.id].move(my_store, "W"),
-        "l": () => my_store.units[my_store.selected_unit.id].move(my_store, "E"),
-        "i": () => my_store.units[my_store.selected_unit.id].move(my_store, "NE"),
-        "u": () => my_store.units[my_store.selected_unit.id].move(my_store, "NW"),
-        "m": () => my_store.units[my_store.selected_unit.id].move(my_store, "SE"),
-        "n": () => my_store.units[my_store.selected_unit.id].move(my_store, "SW"),
-
-        "ArrowUp":    () => my_store.units[my_store.selected_unit.id].move(my_store, "N"),
-        "ArrowDown":  () => my_store.units[my_store.selected_unit.id].move(my_store, "S"),
-        "ArrowLeft":  () => my_store.units[my_store.selected_unit.id].move(my_store, "W"),
-        "ArrowRight": () => my_store.units[my_store.selected_unit.id].move(my_store, "E"),
-        "PageUp":     () => my_store.units[my_store.selected_unit.id].move(my_store, "NE"),
-        "Home":       () => my_store.units[my_store.selected_unit.id].move(my_store, "NW"),
-        "PageDown":   () => my_store.units[my_store.selected_unit.id].move(my_store, "SE"),
-        "End":        () => my_store.units[my_store.selected_unit.id].move(my_store, "SW"),
+        "ArrowUp":    () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "N"),
+        "ArrowDown":  () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "S"),
+        "ArrowLeft":  () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "W"),
+        "ArrowRight": () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "E"),
+        "PageUp":     () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "NE"),
+        "Home":       () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "NW"),
+        "PageDown":   () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "SE"),
+        "End":        () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "SW"),
 
         "c": function () {
             viewport_center(
                 my_store,
-                my_store.units[my_store.selected_unit.id].x,
-                my_store.units[my_store.selected_unit.id].y
+                my_store.units[my_store.selected_entity.id].x,
+                my_store.units[my_store.selected_entity.id].y
             )
         }
     }
@@ -119,69 +110,79 @@ function game_reset() {
     ui_msg("resetting game")
 }
 
-function build_units_list(
+function build_entities_list(
+    container_id,
     store,
-    selected_unit_id,
-    container_id = "units_list") {
+    type,
+    selected_entity_id
+    ) {
 
-    const units = store.units
     const container = document.getElementById(container_id)
     if (!container) {
         throw "could not find the unit list container '"+ container_id + "'"
     }
 
+    const entities = store[type]
+    console.log(type)
+    console.log(entities)
     Array.from(
-        units,
-        function(unit) {
+        entities,
+        function(entity) {
             container.appendChild(
-                build_unit_list_item(
+                build_entity_list_item(
                     store,
-                    unit,
-                    selected_unit_id
+                    type,
+                    entity,
+                    selected_entity_id
                 )
             )
         }
     )
 }
 
-function build_unit_list_item(store, unit, selected_unit_id) {
+function build_entity_list_item(store, entity_type, entity, selected_entity_id) {
     const el_container = document.createElement("div")
-    el_container.classList.add("unit_selector_container")
+    el_container.classList.add(entity_type + "_selector_container")
 
     const el = document.createElement("div")
-    el.id = "unit_id__" + unit.id
+    el.id = entity_type + "_id__" + entity.id
     el.classList.add('unit_selector')
-    if (unit.id == selected_unit_id) {
-        el.classList.add('selected_unit_selector')
+    if (
+            entity.id == selected_entity_id
+            && entity.unit_type == store.selected_entity.type
+        ) {
+        el.classList.add('selected_' + entity_type + '_selector')
     }
-
-    el.appendChild( store.sprites.shield.cloneNode(true) )
+    el.innerHTML = entity.icon;
 
     el.onclick = function () {
-        const old_selected_unit_id = store.selected_unit.id
+        const old_selected_entity_id = store.selected_entity.id
+        const old_selected_entity_type = store.selected_entity.type
 
-        document.getElementById("unit_id__" + old_selected_unit_id)
-            .classList.remove('selected_unit_selector')
+        document.getElementById(
+            old_selected_entity_type + "_id__" + old_selected_entity_id
+        ).classList.remove('selected_' + old_selected_entity_type + '_selector')
 
-        store.selected_unit.id = unit.id
-        document.getElementById("unit_id__" + unit.id)
-            .classList.add("selected_unit_selector")
+        store.selected_entity.id = entity.id
+        store.selected_entity.type = entity_type
 
-        viewport_center(store, unit.x, unit.y)
+        document.getElementById(entity_type + "_id__" + entity.id)
+            .classList.add("selected_" + entity_type + "_selector")
+
+        viewport_center(store, entity.x, entity.y)
     }
 
     el_container.appendChild(el)
 
     const el_details = document.createElement("div")
-    el_details.classList.add("unit_selector_details")
-    el_details.innerHTML = unit.id + ": " + unit.x + " " + unit.y
+    el_details.classList.add(entity_type + "_selector_details")
+    el_details.innerHTML = entity.id + ": " + entity.x + " " + entity.y
     el_container.appendChild(el_details)
-
     return el_container
 }
 
 export {
     init_keyboard_shortcuts,
     init_ui_button_actions,
-    build_units_list
+    build_entities_list
 }
