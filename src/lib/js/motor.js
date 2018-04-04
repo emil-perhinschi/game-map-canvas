@@ -254,13 +254,15 @@ function world_map_draw(store) {
     ctx.stroke()
 
     // draw towns
+    const town_marker_size = zoom >= 5 ? zoom : 5;
     store.towns.forEach(
         function(town) {
             if (town.in_viewport(offset, viewport)) {
                 ctx.fillStyle = "#FF0000"
                 ctx.fillRect(
-                    town.x - offset.x, town.y - offset.y,
-                    5, 5
+                    ( town.x - offset.x ) * zoom,
+                    ( town.y - offset.y ) * zoom,
+                    town_marker_size, town_marker_size
                 )
             }
         }
