@@ -51,7 +51,7 @@ const web_config = {
             },
             {
                 from: "dist_package.json",
-                to: "dist/package.json"
+                to: "package.json"
             }
         ]),
         new HtmlWebpackPlugin({

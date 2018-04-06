@@ -159,9 +159,12 @@ function build_entity_list_item(store, entity_type, entity, selected_entity_id) 
         const old_selected_entity_id = store.selected_entity.id
         const old_selected_entity_type = store.selected_entity.type
 
-        document.getElementById(
-            old_selected_entity_type + "_id__" + old_selected_entity_id
-        ).classList.remove('selected_' + old_selected_entity_type + '_selector')
+        const selected_entity_doc_id = old_selected_entity_type + "_id__" + old_selected_entity_id;
+        if (document.getElementById(selected_entity_doc_id)) {
+            document.getElementById(selected_entity_doc_id)
+                .classList
+                .remove('selected_' + old_selected_entity_type + '_selector')
+        }
 
         store.selected_entity.id = entity.id
         store.selected_entity.type = entity_type

@@ -246,8 +246,7 @@ function draw_viewport( ctx, store, map_data, tiles) {
     }
 }
 
-
-function world_map_draw(store) {
+function world_map_viewport_details(store) {
     const center = {
         x: store[store.selected_entity.type][store.selected_entity.id].x,
         y: store[store.selected_entity.type][store.selected_entity.id].y
@@ -272,6 +271,17 @@ function world_map_draw(store) {
     if (offset.y < 0) {
         offset.y = 0
     }
+
+    return { center, offset, viewport, zoom }
+}
+
+
+function world_map_draw(store) {
+    const {
+        center,
+        offset,
+        viewport,
+        zoom } = world_map_viewport_details( store )
 
     const world_map_data = fetch_data(
         "world_map",
@@ -331,4 +341,4 @@ function world_map_draw(store) {
 
 }
 
-export { game_tick, world_map_draw }
+export { game_tick, world_map_draw, world_map_viewport_details }

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const frames = {
     "current_second": 0,
@@ -26,8 +26,13 @@ module.exports.store = {
     "world_map_zoom": 1, // how many pixels per tile in the world map container
     "units": [],
     "towns": [],
+    "pointer": [], // use when clicking on the world map
     "selected_entity": {
         "id" : 0,
+        // valid types so far:
+        //    pointer: when clicking with the pointer in the world map or viewport
+        //    units: when a unit is selected
+        //    towns: when selecting a town
         "type" : "units" // by default the first unit is selected
     },
     "on_move" : function() {

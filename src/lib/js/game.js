@@ -2,11 +2,13 @@
 
 import {
     game_tick,
-    world_map_draw
+    world_map_draw,
+    world_map_viewport_details
 } from "motor.js"
 import { Map } from 'Map.js'
 import { Unit } from 'Unit.js'
 import { Town } from 'Town.js'
+import { Pointer } from 'Pointer.js'
 import {
     map_data,
     tile_is_walkable
@@ -19,6 +21,7 @@ import {
 import { store, game_state } from 'globals.js'
 import utils from 'misc_not_mine.js'
 import { now_formatted } from 'util.js'
+import { viewport_center } from 'Viewport.js'
 
 require("mini.css/dist/mini-nord.css")
 require("Style/main.css")
@@ -31,6 +34,7 @@ window.onload = function() {
 // http://nokarma.org/2011/02/02/javascript-game-development-the-game-loop/index.html
 // https://developer.mozilla.org/en-US/docs/Games/Anatomy
 
+    store.pointer[0] =  new Pointer(0, 0, 0)
     const ctx_viewport = document.getElementById('game').getContext("2d")
 
     document.onkeydown = keyboard_actions(store, game_state)
@@ -46,11 +50,43 @@ window.onload = function() {
     ui_msg("towns generated: ", JSON.stringify(store.towns))
 
     world_map_draw(store)
+    init_world_map_events(store, "world_map_canvas")
+
     const tiles = init_tiles()
     game_tick(ctx_viewport, store, game_state, tiles)
 
     // will get here, the next tick is called via setTimeout
     document.getElementById('map_container').focus()
+}
+
+function init_world_map_events(store, world_map_canvas_id) {
+    const canvas = document.getElementById("world_map_canvas")
+    canvas.addEventListener(
+            'mousedown',
+            function(e) {
+                const {
+                    center,
+                    offset,
+                    viewport,
+                    zoom } = world_map_viewport_details( store )
+
+                const x = (e.pageX - canvas.offsetLeft) / store.world_map_zoom
+                const y = (e.pageY - canvas.offsetTop)  / store.world_map_zoom
+                ui_msg(
+                    "centering on: ",
+                    Math.floor(x) + offset.x,
+                    Math.floor(y) + offset.y
+                )
+                store.selected_entity.type = "pointer"
+                store.selected_entity.id = 0
+                store["pointer"][0].x = Math.floor(x) + offset.x
+                store["pointer"][0].y = Math.floor(y) + offset.y
+                viewport_center(store,store["pointer"][0].x, store["pointer"][0].y )
+                e.preventDefault()
+                e.stopPropagation()
+            },
+            false
+        );
 }
 
 function init_towns(my_store) {
