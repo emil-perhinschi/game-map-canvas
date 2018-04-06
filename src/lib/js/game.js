@@ -43,28 +43,25 @@ window.onload = function() {
     ui_msg("towns generated: ", JSON.stringify(store.towns))
 
     world_map_draw(store)
-    game_tick(ctx_viewport, store, game_state);
+    const tiles = init_tiles()
+    game_tick(ctx_viewport, store, game_state, tiles)
 
     // will get here, the next tick is called via setTimeout
     document.getElementById('map_container').focus()
 }
 
 function init_towns(my_store) {
-    const towns = Array(50)
-    let town_id = 0;
-    let count = 0;
-    while (town_id < towns.length) {
-        const x = utils.get_random_int(my_store.world_map_width)
-        const y = utils.get_random_int(my_store.world_map_height)
-        if (tile_is_walkable(map_data, x, y).success === true) {
-            towns[town_id] = new Town(town_id, x, y)
-            town_id += 1
-        }
-        count++
-        if (count > 400 ) {
-            break
-        }
-    }
+    // interesting places
+    // 712 170
+    // 709 1142
+    // 709 1142
+    // 1202 1292
+    // even better 495 1268 ?
+    // best 134 876
+
+    const towns = Array()
+    towns[0] = new Town(0, 132, 877)
+
     return towns;
 }
 
@@ -75,8 +72,8 @@ function init_units(my_store) {
     let unit_id = 0;
     let count = 0;
     while ( unit_id < units.length ) {
-        const x = utils.get_random_int(my_store.full_map_width)
-        const y = utils.get_random_int(my_store.full_map_height)
+        const x = 120 + utils.get_random_int(30)
+        const y = 860 + utils.get_random_int(30)
 
         // only generate unit if in the low lands
         const map_check = tile_is_walkable(map_data, x, y)
@@ -130,4 +127,52 @@ function make_sprites() {
         "shield": shield,
         "cart": cart
     }
+}
+
+
+function init_tiles() {
+    const tiles = new Array()
+    tiles[1] = new Array()
+    tiles[1][0] = new Image()
+    tiles[1][0].src = "sprites/swamp_1.png"
+    tiles[1][1] = new Image()
+    tiles[1][1].src = "sprites/swamp_1_dark.png"
+
+    tiles[2] = new Array()
+    tiles[2][0] = new Image()
+    tiles[2][0].src = "sprites/swamp_2.png"
+    tiles[2][1] = new Image()
+    tiles[2][1].src = "sprites/swamp_2_dark.png"
+
+    tiles[3] = new Array()
+    tiles[3][0] = new Image()
+    tiles[3][0].src = "sprites/swamp_3.png"
+    tiles[3][1] = new Image()
+    tiles[3][1].src = "sprites/swamp_3_dark.png"
+
+    tiles[4] = new Array()
+    tiles[4][0] = new Image()
+    tiles[4][0].src = "sprites/forest_1.png"
+    tiles[4][1] = new Image()
+    tiles[4][1].src = "sprites/forest_1_dark.png"
+
+    tiles[5] = new Array()
+    tiles[5][0] = new Image()
+    tiles[5][0].src = "sprites/forest_2.png"
+    tiles[5][1] = new Image()
+    tiles[5][1].src = "sprites/forest_2_dark.png"
+
+    tiles[6] = new Array()
+    tiles[6][0] = new Image()
+    tiles[6][0].src = "sprites/forest_3.png"
+    tiles[6][1] = new Image()
+    tiles[6][1].src = "sprites/forest_3_dark.png"
+
+    tiles[7] = new Array()
+    tiles[7][0] = new Image()
+    tiles[7][0].src = "sprites/lowlands_forest_topdown.png"
+    tiles[7][1] = new Image()
+    tiles[7][1].src = "sprites/lowlands_forest_topdown_dark.png"
+
+    return tiles
 }

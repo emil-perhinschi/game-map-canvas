@@ -4,7 +4,7 @@ import { viewport_center } from 'Viewport.js'
 import { map_data, fetch_data, update } from 'mock_server_data.js'
 import { map_palette, debug_info } from 'globals.js'
 
-function game_tick(ctx, store, game_state) {
+function game_tick(ctx, store, game_state, tiles) {
 
     const selected_entity_type = store.selected_entity.type
     const selected_entity = store[selected_entity_type][store.selected_entity.id]
@@ -20,7 +20,7 @@ function game_tick(ctx, store, game_state) {
         store.viewport_height
     )
 
-    draw_viewport(ctx, store, viewport_map_data)
+    draw_viewport(ctx, store, viewport_map_data, tiles)
     draw_units(ctx, store)
     draw_towns(ctx, store)
 
@@ -34,7 +34,7 @@ function game_tick(ctx, store, game_state) {
             function() {
                 window.requestAnimationFrame(
                     function() {
-                        game_tick(ctx, store, game_state)
+                        game_tick(ctx, store, game_state, tiles)
                     }
                 )
             },
@@ -165,23 +165,77 @@ function draw_diagonals(ctx, store) {
 }
 
 
-function draw_viewport( ctx, store, map_data) {
+function get_selected_entity(store, map_data) {
+    const type = store.selected_entity.type
+    const id = store.selected_entity.id
+    return store[type][id]
+}
+
+
+function draw_viewport( ctx, store, map_data, tiles) {
 
     if ( ctx == null) { return; }
+
+    const entity = get_selected_entity(store, map_data)
 
     for (let y = 0; y < store.viewport_height; y++) {
         for (let x = 0; x < store.viewport_width; x++) {
 
-            ctx.fillStyle = "#ffffff" // default is white
-            if (y in map_data && x in map_data[y]) {
-                ctx.fillStyle = map_palette[map_data[y][x]]
+            if ( !(y in map_data) || !(x in map_data[y]) ) {
+                ctx.fillStyle = "#ffffff" // default is white
+                ctx.fillRect(
+                    x * store.tile_width,
+                    y * store.tile_height,
+                    store.tile_width,
+                    store.tile_height
+                )
+                continue
             }
+
+            const terrain_type = map_data[y][x]
+            ctx.fillStyle = map_palette[terrain_type]
+
             ctx.fillRect(
                 x * store.tile_width,
                 y * store.tile_height,
                 store.tile_width,
                 store.tile_height
-            );
+            )
+
+            if (tiles[terrain_type] === undefined ) {
+                continue
+            }
+
+            if (map_data[y][x] = 0 || map_data[y][x] > 7) {
+                // no tiles for these terrains
+                continue
+            }
+
+            // draw image if tile is visible
+            //    for now draw on all in viewport
+
+            let img = null
+            const x_distance = Math.abs(x - ( entity.x - store.viewport_offset_x) )
+            const y_distance = Math.abs(y - ( entity.y - store.viewport_offset_y) )
+            if ( // first do the cheap computations
+                x_distance > 3 || y_distance > 3
+            ) {
+                img = tiles[terrain_type][1].cloneNode()
+            } else {
+                if (
+                    Math.sqrt( Math.pow(x_distance, 2) + Math.pow(y_distance, 2) ) > 3
+                ) {
+                    img = tiles[terrain_type][1].cloneNode()
+                } else {
+                    img = tiles[terrain_type][0].cloneNode()
+                }
+            }
+            ctx.drawImage(
+                img,
+                x * store.tile_width,
+                y * store.tile_height
+            )
+
         }
     }
 }

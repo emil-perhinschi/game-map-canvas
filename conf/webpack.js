@@ -48,6 +48,10 @@ const web_config = {
                 from: "src/assets/static/sprites/*.png",
                 to: 'sprites/',
                 flatten: true
+            },
+            {
+                from: "dist_package.json",
+                to: "dist/package.json"
             }
         ]),
         new HtmlWebpackPlugin({
