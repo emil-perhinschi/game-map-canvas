@@ -189,45 +189,45 @@ function init_tiles() {
     const tiles = new Array()
     tiles[1] = new Array()
     tiles[1][0] = new Image()
-    tiles[1][0].src = "sprites/swamp_1.png"
+    tiles[1][0].src = "sprites/swamp_1_dark.png"
     tiles[1][1] = new Image()
-    tiles[1][1].src = "sprites/swamp_1_dark.png"
+    tiles[1][1].src = "sprites/swamp_1.png"
 
     tiles[2] = new Array()
     tiles[2][0] = new Image()
-    tiles[2][0].src = "sprites/swamp_2.png"
+    tiles[2][0].src = "sprites/swamp_2_dark.png"
     tiles[2][1] = new Image()
-    tiles[2][1].src = "sprites/swamp_2_dark.png"
+    tiles[2][1].src = "sprites/swamp_2.png"
 
     tiles[3] = new Array()
     tiles[3][0] = new Image()
-    tiles[3][0].src = "sprites/swamp_3.png"
+    tiles[3][0].src = "sprites/swamp_3_dark.png"
     tiles[3][1] = new Image()
-    tiles[3][1].src = "sprites/swamp_3_dark.png"
+    tiles[3][1].src = "sprites/swamp_3.png"
 
     tiles[4] = new Array()
     tiles[4][0] = new Image()
-    tiles[4][0].src = "sprites/forest_1.png"
+    tiles[4][0].src = "sprites/forest_1_dark.png"
     tiles[4][1] = new Image()
-    tiles[4][1].src = "sprites/forest_1_dark.png"
+    tiles[4][1].src = "sprites/forest_1.png"
 
     tiles[5] = new Array()
     tiles[5][0] = new Image()
-    tiles[5][0].src = "sprites/forest_2.png"
+    tiles[5][0].src = "sprites/forest_2_dark.png"
     tiles[5][1] = new Image()
-    tiles[5][1].src = "sprites/forest_2_dark.png"
+    tiles[5][1].src = "sprites/forest_2.png"
 
     tiles[6] = new Array()
     tiles[6][0] = new Image()
-    tiles[6][0].src = "sprites/forest_3.png"
+    tiles[6][0].src = "sprites/forest_3_dark.png"
     tiles[6][1] = new Image()
-    tiles[6][1].src = "sprites/forest_3_dark.png"
+    tiles[6][1].src = "sprites/forest_3.png"
 
     tiles[7] = new Array()
     tiles[7][0] = new Image()
-    tiles[7][0].src = "sprites/lowlands_forest_topdown.png"
+    tiles[7][0].src = "sprites/lowlands_forest_topdown_dark.png"
     tiles[7][1] = new Image()
-    tiles[7][1].src = "sprites/lowlands_forest_topdown_dark.png"
+    tiles[7][1].src = "sprites/lowlands_forest_topdown.png"
 
     return tiles
 }

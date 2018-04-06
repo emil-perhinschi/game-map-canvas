@@ -20,6 +20,9 @@ class Town extends Entity {
     }
 
     draw(ctx, store) {
+        const old_fill_style = ctx.fillStyle
+        const old_stroke_style = ctx.strokeStyle
+
         ctx.imageSmoothingEnabled = true
         ctx.fillStyle = this.color_code
         const draw_coords = this.compute_draw_coordinates(store)
@@ -34,6 +37,8 @@ class Town extends Entity {
             draw_coords.x,
             draw_coords.y + store.tile_height - 9
         )
+        ctx.fillStyle = old_fill_style
+
         ctx.beginPath()
         if(this.is_own()) {
             ctx.strokeStyle = 'blue'
@@ -42,6 +47,8 @@ class Town extends Entity {
         }
         ctx.rect(draw_coords.x, draw_coords.y, 64, 64)
         ctx.stroke()
+        ctx.closePath()
+        ctx.strokeStyle = old_stroke_style
     }
 
     static type() {

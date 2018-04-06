@@ -344,7 +344,10 @@ function world_map_draw(store) {
     const town_marker_size = zoom >= 5 ? zoom : 5;
     store.towns.forEach(
         function(town) {
-            if (town.in_viewport(offset, viewport)) {
+            if (
+                town.in_viewport(offset, viewport)
+                && town.is_known()
+            ) {
                 ctx.fillStyle = "#FF0000"
                 ctx.fillRect(
                     ( town.x - offset.x ) * zoom,
