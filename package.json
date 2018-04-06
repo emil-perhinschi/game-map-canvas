@@ -3,16 +3,11 @@
   "version": "1.0.0",
   "description": "map with canvas",
   "main": "index.js",
-  "directories": {
-    "lib": "lib",
-    "test": "tests"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "__build": "rm -rf dist/*; webpack --mode development --config ./conf/webpack.js --display-error-details",
-    "build": "webpack --mode development --config ./conf/webpack.js --display-error-details",
-    "start": "nw ./dist/",
-    "dist": "build --tasks linux-x64 ./dist/"
+    "build": "rm -rf dist/*; webpack --mode development --config ./conf/webpack.js --display-error-details",
+    "__build": "webpack --mode development --config ./conf/webpack.js --display-error-details",
+    "start": "nw ./dist/"
   },
   "author": "Emil Nicolaie Perhinschi",
   "license": "SEE LICENSE IN licence.txt",
@@ -22,7 +17,6 @@
     "fs": "0.0.1-security",
     "html-webpack-plugin": "^3.1.0",
     "node-sass": "^4.8.3",
-    "nwjs-builder-phoenix": "^1.14.6",
     "pngjs": "^3.3.2",
     "readline": "^1.3.0",
     "sass-loader": "^6.0.7",
@@ -31,11 +25,6 @@
     "webpack-cli": "^2.0.13"
   },
   "dependencies": {
-    "install": "^0.11.0",
-    "mini.css": "^2.3.7",
-    "npm": "^5.8.0"
-  },
-  "build": {
-    "nwVersion": "0.14.7"
+    "mini.css": "^2.3.7"
   }
 }
