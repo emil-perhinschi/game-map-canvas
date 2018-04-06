@@ -6,11 +6,15 @@ import { map_palette, debug_info } from 'globals.js'
 
 function game_tick(ctx, store, game_state, tiles) {
 
-    const selected_entity_type = store.selected_entity.type
-    const selected_entity = store[selected_entity_type][store.selected_entity.id]
+    if (store.pointer === null ) {
+        const selected_entity_type = store.selected_entity.type
+        const selected_entity = store[selected_entity_type][store.selected_entity.id]
 
-    if (!selected_entity.visible_in_viewport(store, 0)) {
-        viewport_center(store, selected_entity.x, selected_entity.y)
+        if (!selected_entity.visible_in_viewport(store, 0)) {
+            viewport_center(store, selected_entity.x, selected_entity.y)
+        }
+    } else {
+        viewport_center(store, store.pointer.x, store.pointer.y)
     }
 
     const viewport_map_data = update(
@@ -247,9 +251,18 @@ function draw_viewport( ctx, store, map_data, tiles) {
 }
 
 function world_map_viewport_details(store) {
+
+    let selected_entity = null
+    
+    if (store.pointer ) {
+        selected_entity = store.pointer
+    } else {
+        selected_entity = store[store.selected_entity.type][store.selected_entity.id]
+    }
+
     const center = {
-        x: store[store.selected_entity.type][store.selected_entity.id].x,
-        y: store[store.selected_entity.type][store.selected_entity.id].y
+        x: selected_entity.x,
+        y: selected_entity.y
     }
 
     const zoom = store.world_map_zoom // how wide is the tile
@@ -277,6 +290,7 @@ function world_map_viewport_details(store) {
 
 
 function world_map_draw(store) {
+
     const {
         center,
         offset,
@@ -293,7 +307,9 @@ function world_map_draw(store) {
         }
     )
 
-    const ctx = document.getElementById("world_map_canvas").getContext("2d")
+    const ctx = document.getElementById(
+        store.world_map_canvas_id
+    ).getContext("2d")
     for (let y = 0; y < viewport.height; y++) {
         for (let x = 0; x < viewport.width; x++) {
             ctx.fillStyle = "#ffffff" // default is white

@@ -19,6 +19,7 @@ module.exports.store = {
     "viewport_height": 13,// in tiles
     "full_map_width": 600,// in tiles
     "full_map_height": 600,// in tiles
+    "world_map_canvas_id": "world_map_canvas",
     "world_map_width": 1600,// in tiles
     "world_map_height": 1600, // in tiles
     "world_map_container_width": 600, // in pixels
@@ -26,11 +27,13 @@ module.exports.store = {
     "world_map_zoom": 1, // how many pixels per tile in the world map container
     "units": [],
     "towns": [],
-    "pointer": [], // use when clicking on the world map
+    // use when clicking on the world map to pan around
+    //   if not null then the user clicked on the world map and the viewport
+    //   should center on that point
+    "pointer": null,
     "selected_entity": {
         "id" : 0,
         // valid types so far:
-        //    pointer: when clicking with the pointer in the world map or viewport
         //    units: when a unit is selected
         //    towns: when selecting a town
         "type" : "units" // by default the first unit is selected

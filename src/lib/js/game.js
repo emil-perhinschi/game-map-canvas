@@ -16,7 +16,8 @@ import {
 import {
     init_keyboard_shortcuts,
     init_ui_button_actions,
-    build_entities_list
+    build_entities_list,
+    remove_selection_mark_from_previously_selected_unit
 } from 'ui.js'
 import { store, game_state } from 'globals.js'
 import utils from 'misc_not_mine.js'
@@ -34,7 +35,6 @@ window.onload = function() {
 // http://nokarma.org/2011/02/02/javascript-game-development-the-game-loop/index.html
 // https://developer.mozilla.org/en-US/docs/Games/Anatomy
 
-    store.pointer[0] =  new Pointer(0, 0, 0)
     const ctx_viewport = document.getElementById('game').getContext("2d")
 
     document.onkeydown = keyboard_actions(store, game_state)
@@ -77,11 +77,19 @@ function init_world_map_events(store, world_map_canvas_id) {
                     Math.floor(x) + offset.x,
                     Math.floor(y) + offset.y
                 )
-                store.selected_entity.type = "pointer"
-                store.selected_entity.id = 0
-                store["pointer"][0].x = Math.floor(x) + offset.x
-                store["pointer"][0].y = Math.floor(y) + offset.y
-                viewport_center(store,store["pointer"][0].x, store["pointer"][0].y )
+
+
+                store.pointer = new Pointer(
+                    Math.floor(x) + offset.x,
+                    Math.floor(y) + offset.y
+                )
+
+                viewport_center(
+                    store,
+                    store.pointer.x,
+                    store.pointer.y
+                )
+
                 e.preventDefault()
                 e.stopPropagation()
             },

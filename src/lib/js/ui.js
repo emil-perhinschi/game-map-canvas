@@ -156,16 +156,11 @@ function build_entity_list_item(store, entity_type, entity, selected_entity_id) 
     el.innerHTML = entity.icon;
 
     el.onclick = function () {
-        const old_selected_entity_id = store.selected_entity.id
-        const old_selected_entity_type = store.selected_entity.type
-
-        const selected_entity_doc_id = old_selected_entity_type + "_id__" + old_selected_entity_id;
-        if (document.getElementById(selected_entity_doc_id)) {
-            document.getElementById(selected_entity_doc_id)
-                .classList
-                .remove('selected_' + old_selected_entity_type + '_selector')
+        if (store.pointer !== null ) {
+            store.pointer = null
         }
 
+        remove_selection_mark_from_previously_selected_unit(store)
         store.selected_entity.id = entity.id
         store.selected_entity.type = entity_type
 
@@ -184,8 +179,20 @@ function build_entity_list_item(store, entity_type, entity, selected_entity_id) 
     return el_container
 }
 
+function remove_selection_mark_from_previously_selected_unit(store) {
+    const old_selected_entity_id = store.selected_entity.id
+    const old_selected_entity_type = store.selected_entity.type
+
+    const selected_entity_doc_id = old_selected_entity_type + "_id__" + old_selected_entity_id;
+    if (document.getElementById(selected_entity_doc_id)) {
+        document.getElementById(selected_entity_doc_id)
+            .classList
+            .remove('selected_' + old_selected_entity_type + '_selector')
+    }
+}
 export {
     init_keyboard_shortcuts,
     init_ui_button_actions,
-    build_entities_list
+    build_entities_list,
+    remove_selection_mark_from_previously_selected_unit
 }
