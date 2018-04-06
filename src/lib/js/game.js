@@ -7,7 +7,10 @@ import {
 import { Map } from 'Map.js'
 import { Unit } from 'Unit.js'
 import { Town } from 'Town.js'
-import { map_data, tile_is_walkable } from 'mock_server_data.js'
+import {
+    map_data,
+    tile_is_walkable
+} from 'mock_server_data.js'
 import {
     init_keyboard_shortcuts,
     init_ui_button_actions,

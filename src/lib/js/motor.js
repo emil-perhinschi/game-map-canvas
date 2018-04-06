@@ -1,7 +1,7 @@
 'use strict'
 
 import { viewport_center } from 'Viewport.js'
-import { map_data, fetch_data, update } from 'mock_server_data.js'
+import { map_data, fetch_data, update, tile_is_visible } from 'mock_server_data.js'
 import { map_palette, debug_info } from 'globals.js'
 
 function game_tick(ctx, store, game_state, tiles) {
@@ -73,6 +73,7 @@ function draw_debug_info( ctx, store) {
 }
 
 function draw_units(ctx, store) {
+    const selected_unit = store[store.selected_entity.type][store.selected_entity.id]
     store.units.map(
         function (unit) {
             // if( store.selected_entity["unit"].id === unit.id ) {
@@ -80,6 +81,15 @@ function draw_units(ctx, store) {
             // }
             // unit = store.units[unit_id]
             if (unit.visible_in_viewport(store, 0)) {
+                if (
+                    tile_is_visible(
+                        store.visibility_distance,
+                        selected_unit.x,
+                        selected_unit.y,
+                        unit.x,
+                        unit.y
+                    )
+                )
                 unit.draw(ctx, store)
             }
         }
@@ -211,25 +221,21 @@ function draw_viewport( ctx, store, map_data, tiles) {
                 continue
             }
 
-            // draw image if tile is visible
-            //    for now draw on all in viewport
-
             let img = null
-            const x_distance = Math.abs(x - ( entity.x - store.viewport_offset_x) )
-            const y_distance = Math.abs(y - ( entity.y - store.viewport_offset_y) )
-            if ( // first do the cheap computations
-                x_distance > 3 || y_distance > 3
-            ) {
-                img = tiles[terrain_type][1].cloneNode()
+            const is_visible = tile_is_visible(
+                store.visibility_distance,
+                entity.x,
+                entity.y,
+                // make x and y absolute values, same as entity.x and entity.y
+                x + store.viewport_offset_x,
+                y + store.viewport_offset_y
+            )
+            if ( is_visible ) {
+                img = tiles[terrain_type][0].cloneNode()
             } else {
-                if (
-                    Math.sqrt( Math.pow(x_distance, 2) + Math.pow(y_distance, 2) ) > 3
-                ) {
-                    img = tiles[terrain_type][1].cloneNode()
-                } else {
-                    img = tiles[terrain_type][0].cloneNode()
-                }
+                img = tiles[terrain_type][1].cloneNode()
             }
+
             ctx.drawImage(
                 img,
                 x * store.tile_width,
@@ -239,6 +245,7 @@ function draw_viewport( ctx, store, map_data, tiles) {
         }
     }
 }
+
 
 function world_map_draw(store) {
     const center = {

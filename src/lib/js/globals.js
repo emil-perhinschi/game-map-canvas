@@ -32,7 +32,8 @@ module.exports.store = {
     },
     "on_move" : function() {
         throw( new Error("no on_move action was set in globals") )
-    }
+    },
+    "visibility_distance": 3
 }
 
 module.exports.debug_info = {

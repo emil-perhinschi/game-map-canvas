@@ -92,4 +92,24 @@ function update(offset_x, offset_y, width, height ) {
     )
 }
 
-export { fetch_data, map_data, tile_is_walkable, update }
+function tile_is_visible(max_distance, origin_x, origin_y, tile_x, tile_y) {
+    const x_distance = Math.abs(tile_x - origin_x )
+    const y_distance = Math.abs(tile_y - origin_y )
+
+    if ( // first do the cheap computations
+        x_distance > 3 || y_distance > 3
+    ) {
+        return false
+    } else {
+        if (
+            Math.sqrt( Math.pow(x_distance, 2) + Math.pow(y_distance, 2) ) > 3
+        ) {
+            return false
+        } else {
+            return true
+        }
+    }
+}
+
+
+export { fetch_data, map_data, tile_is_walkable, update, tile_is_visible }
