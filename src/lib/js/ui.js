@@ -128,14 +128,22 @@ function build_entities_list(
     Array.from(
         entities,
         function(entity) {
-            container.appendChild(
-                build_entity_list_item(
-                    store,
-                    type,
-                    entity,
-                    selected_entity_id
+            if (
+                entity.is_own()
+                || (
+                    entity.is_landmark()
+                    && entity.is_known()
+                    )
+                ) {
+                container.appendChild(
+                    build_entity_list_item(
+                        store,
+                        type,
+                        entity,
+                        selected_entity_id
+                    )
                 )
-            )
+            }
         }
     )
 }

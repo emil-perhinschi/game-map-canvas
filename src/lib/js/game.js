@@ -108,7 +108,8 @@ function init_towns(my_store) {
 
     const towns = Array()
     towns[0] = new Town(0, 132, 877)
-
+    towns[0].is_known(true)
+    towns[1] = new Town(1, 137, 871)
     return towns;
 }
 
@@ -134,6 +135,13 @@ function init_units(my_store) {
         }
     }
 
+    // make some friendlies
+    units[0].is_friendly(true)
+    units[0].is_own(true)
+    units[1].is_friendly(true)
+    units[1].is_own(false)
+    units[2].is_friendly(true)
+    units[2].is_own(false)
     return units;
 }
 

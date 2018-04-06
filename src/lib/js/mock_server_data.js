@@ -92,9 +92,30 @@ function update(offset_x, offset_y, width, height ) {
     )
 }
 
-function tile_is_visible(max_distance, origin_x, origin_y, tile_x, tile_y) {
-    const x_distance = Math.abs(tile_x - origin_x )
-    const y_distance = Math.abs(tile_y - origin_y )
+function tile_is_visible(store, tile_x, tile_y) {
+    // foreach owned unit check if it can see the tile coordinates
+    let is_visible = false
+    for (let i = 0; i < store.units.length; i++) {
+        const unit = store.units[i]
+        if (!unit.own === true) {
+            continue
+        }
+
+        if (unit_can_see_tile(
+                unit, store.visibility_distance,
+                tile_x, tile_y
+            )
+        ) {
+            is_visible = true
+            break
+        }
+    }
+    return is_visible
+}
+
+function unit_can_see_tile(unit, max_distance, tile_x, tile_y) {
+    const x_distance = Math.abs( tile_x - unit.x )
+    const y_distance = Math.abs( tile_y - unit.y )
 
     if ( // first do the cheap computations
         x_distance > 3 || y_distance > 3
@@ -110,6 +131,5 @@ function tile_is_visible(max_distance, origin_x, origin_y, tile_x, tile_y) {
         }
     }
 }
-
 
 export { fetch_data, map_data, tile_is_walkable, update, tile_is_visible }

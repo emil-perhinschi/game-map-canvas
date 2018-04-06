@@ -2,11 +2,13 @@
 import { Entity } from "Entity.js"
 
 class Unit extends Entity {
-    constructor(id, x, y) {
-        super(id, x, y)
+    // friendly = owned by the player
+    constructor(id, x, y, own = false, friendly = false) {
+        super(id, x, y, own, friendly)
         this.color_code = "#000000"
         this.icon = '𓀦'
-        this.unit_type = Unit.type()
+        this.entity_type = Unit.type()
+        this.landmark = false
     }
 
     draw(ctx, store) {
@@ -14,13 +16,22 @@ class Unit extends Entity {
         ctx.fillStyle = this.color_code
         const draw_coords = this.compute_draw_coordinates(store)
         ctx.font = "50px Arial"
-        ctx.fillStyle = "red"
+        if (this.is_friendly()) {
+            ctx.fillStyle = "blue"
+        } else {
+            ctx.fillStyle = "red"
+        }
         ctx.fillText(
             this.icon,
             draw_coords.x,
             draw_coords.y + store.tile_height - 3
         )
         ctx.beginPath()
+        if(this.is_own()) {
+            ctx.strokeStyle = 'blue'
+        } else {
+            ctx.strokeStyle = 'red'
+        }
         ctx.rect(draw_coords.x, draw_coords.y, 64, 64)
         ctx.stroke()
     }

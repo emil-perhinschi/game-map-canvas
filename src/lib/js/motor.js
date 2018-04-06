@@ -77,24 +77,20 @@ function draw_debug_info( ctx, store) {
 }
 
 function draw_units(ctx, store) {
-    const selected_unit = store[store.selected_entity.type][store.selected_entity.id]
-    store.units.map(
+    store.units.forEach(
         function (unit) {
-            // if( store.selected_entity["unit"].id === unit.id ) {
-            //     return false
-            // }
-            // unit = store.units[unit_id]
             if (unit.visible_in_viewport(store, 0)) {
-                if (
+                if (unit.is_own()) {
+                    unit.draw(ctx, store)
+                } else if (
                     tile_is_visible(
-                        store.visibility_distance,
-                        selected_unit.x,
-                        selected_unit.y,
+                        store,
                         unit.x,
                         unit.y
                     )
-                )
-                unit.draw(ctx, store)
+                ) {
+                    unit.draw(ctx, store)
+                }
             }
         }
     )
@@ -104,7 +100,13 @@ function draw_towns(ctx, store) {
     store.towns.map(
         function (town) {
             if (town.visible_in_viewport(store, 0)) {
-                town.draw(ctx, store)
+                if (tile_is_visible(store, town.x, town.y)) {
+                    town.is_known(true)
+                }
+
+                if (town.is_known()) {
+                    town.draw(ctx, store)
+                }
             }
         }
     )
@@ -227,9 +229,7 @@ function draw_viewport( ctx, store, map_data, tiles) {
 
             let img = null
             const is_visible = tile_is_visible(
-                store.visibility_distance,
-                entity.x,
-                entity.y,
+                store,
                 // make x and y absolute values, same as entity.x and entity.y
                 x + store.viewport_offset_x,
                 y + store.viewport_offset_y
@@ -253,7 +253,7 @@ function draw_viewport( ctx, store, map_data, tiles) {
 function world_map_viewport_details(store) {
 
     let selected_entity = null
-    
+
     if (store.pointer ) {
         selected_entity = store.pointer
     } else {

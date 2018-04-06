@@ -4,7 +4,7 @@ const map_data = require('mock_server_data.js').map_data
 const tile_is_walkable = require('mock_server_data.js').tile_is_walkable
 
 class Entity {
-    constructor(id, x, y) {
+    constructor(id, x, y, own = false, friendly = false) {
         if (new.target === Entity) {
             throw new TypeError("Cannot construct Entity instances directly");
         }
@@ -12,6 +12,39 @@ class Entity {
         this.x = x
         this.y = y
         this.color_code = "#000000"
+        this.own = own // you own this entity
+        this.friendly = false // means you're not at war
+        this.landmark = false // fixed, does not move, such as a town
+        this.known = false // you have seen it
+
+    }
+
+    is_own(own) {
+        if (own != undefined ) {
+            this.own = own
+        }
+        return this.own
+    }
+
+    is_known(known) {
+        if (known != undefined ) {
+            this.known = known
+        }
+        return this.known
+    }
+
+    is_friendly(friendly) {
+        if (friendly != undefined) {
+            this.friendly = friendly
+        }
+        return this.friendly
+    }
+
+    is_landmark(landmark) {
+        if (landmark != undefined) {
+            this.landmark = landmark
+        }
+        return this.landmark
     }
 
     position() {
