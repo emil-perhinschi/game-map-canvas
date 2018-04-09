@@ -35,7 +35,8 @@ window.onload = function() {
 // http://nokarma.org/2011/02/02/javascript-game-development-the-game-loop/index.html
 // https://developer.mozilla.org/en-US/docs/Games/Anatomy
 
-    const ctx_viewport = document.getElementById('game').getContext("2d")
+    const ctx_viewport = document.getElementById('game')
+                            .getContext("2d", { alpha: false })
 
     document.onkeydown = keyboard_actions(store, game_state)
     init_ui_button_actions(window, store, game_state)
@@ -228,6 +229,12 @@ function init_tiles() {
     tiles[7][0].src = "sprites/lowlands_forest_topdown_dark.png"
     tiles[7][1] = new Image()
     tiles[7][1].src = "sprites/lowlands_forest_topdown.png"
+
+    tiles[8] = new Array()
+    tiles[8][0] = new Image()
+    tiles[8][0].src = "sprites/lowlands_forest_topdown_tileable_dark.png"
+    tiles[8][1] = new Image()
+    tiles[8][1].src = "sprites/lowlands_forest_topdown_tileable.png"
 
     return tiles
 }

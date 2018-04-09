@@ -1,7 +1,8 @@
 "use strict"
 
-const map_data = require('mock_server_data.js').map_data
-const tile_is_walkable = require('mock_server_data.js').tile_is_walkable
+import { viewport_center } from "Viewport.js"
+import { map_data } from "mock_server_data.js"
+import { tile_is_walkable } from "mock_server_data.js"
 
 class Entity {
     constructor(id, x, y, own = false, friendly = false) {
@@ -94,6 +95,9 @@ class Entity {
         if (can_move.success == true) {
             this.x = new_x
             this.y = new_y
+            if (store.center_on_move === true) {
+                viewport_center(store, new_x, new_y)
+            }
         } else {
             ui_msg( "cannot move there: " + can_move.reason )
         }

@@ -222,7 +222,7 @@ function draw_viewport( ctx, store, map_data, tiles) {
                 continue
             }
 
-            if (map_data[y][x] = 0 || map_data[y][x] > 7) {
+            if (map_data[y][x] = 0 || map_data[y][x] > 8) {
                 // no tiles for these terrains
                 continue
             }
@@ -249,6 +249,7 @@ function draw_viewport( ctx, store, map_data, tiles) {
         }
     }
 }
+
 
 function world_map_viewport_details(store) {
 

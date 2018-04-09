@@ -44,6 +44,7 @@ function zoom_in(my_store) {
     }
 
     my_store.world_map_zoom += 1
+    console.log("zoom is " + my_store.world_map_zoom)
     world_map_draw(my_store)
 }
 
@@ -52,6 +53,7 @@ function zoom_out(my_store) {
         return false;
     }
     my_store.world_map_zoom -= 1
+    console.log("zoom is " + my_store.world_map_zoom)
     world_map_draw(my_store)
 }
 

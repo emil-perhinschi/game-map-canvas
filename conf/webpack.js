@@ -57,6 +57,7 @@ const web_config = {
         new HtmlWebpackPlugin({
             title: 'My Map v.0.1.2',
             template: path.resolve(__dirname + '/../src/assets/index.html'),
+            inject: true,
             world_map_width:  store.world_map_width,
             world_map_height: store.world_map_height,
             full_map_width:  store.full_map_width,

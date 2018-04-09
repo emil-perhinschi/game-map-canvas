@@ -1,14 +1,16 @@
 "use strict"
 import { Entity } from "Entity.js"
+import { UnitKnowledge } from "UnitKnowledge.js"
 
 class Unit extends Entity {
     // friendly = owned by the player
     constructor(id, x, y, own = false, friendly = false) {
         super(id, x, y, own, friendly)
         this.color_code = "#000000"
-        this.icon = '𓀦'
         this.entity_type = Unit.type()
         this.landmark = false
+        this.moves = 5
+        this.knowledge = new UnitKnowledge()
     }
 
     draw(ctx, store) {
@@ -24,10 +26,12 @@ class Unit extends Entity {
         } else {
             ctx.fillStyle = "red"
         }
-        ctx.fillText(
-            this.icon,
+        const img = new Image()
+        img.src = 'sprites/unit_topdown.png'
+        ctx.drawImage(
+            img,
             draw_coords.x,
-            draw_coords.y + store.tile_height - 3
+            draw_coords.y
         )
         ctx.fillStyle = old_fill_style
 

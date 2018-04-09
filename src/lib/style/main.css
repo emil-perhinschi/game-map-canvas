@@ -7,6 +7,7 @@
 
 #ui_container > div {
     margin: 5px;
+    font-size: smaller;
 }
 
 #commands {

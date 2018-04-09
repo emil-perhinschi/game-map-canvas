@@ -8,6 +8,7 @@ const frames = {
 
 // ... need to replace this, can't make it const
 module.exports.store = {
+    "center_on_move": false,
     "sprites": {},
     "frames": frames,
     "max_fps": 5,
