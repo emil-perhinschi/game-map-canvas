@@ -32,10 +32,12 @@ class Town extends Entity {
         } else {
             ctx.fillStyle = "red"
         }
-        ctx.fillText(
-            this.icon,
+        const img = new Image()
+        img.src = 'sprites/fort_topdown.png'
+        ctx.drawImage(
+            img,
             draw_coords.x,
-            draw_coords.y + store.tile_height - 9
+            draw_coords.y
         )
         ctx.fillStyle = old_fill_style
 
