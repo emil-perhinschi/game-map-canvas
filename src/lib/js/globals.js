@@ -25,7 +25,7 @@ module.exports.store = {
     "world_map_height": 1600, // in tiles
     "world_map_container_width": 600, // in pixels
     "world_map_container_height": 600, // in pixels
-    "world_map_zoom": 1, // how many pixels per tile in the world map container
+    "world_map_zoom": 2, // how many pixels per tile in the world map container
     "units": [],
     "towns": [],
     // use when clicking on the world map to pan around
@@ -38,6 +38,9 @@ module.exports.store = {
         //    units: when a unit is selected
         //    towns: when selecting a town
         "type" : "units" // by default the first unit is selected
+    },
+    "selected": function() {
+        return this[this.selected_entity.type][this.selected_entity.id]
     },
     "on_move" : function() {
         throw( new Error("no on_move action was set in globals") )
@@ -54,26 +57,45 @@ module.exports.debug_info = {
     "show": true
 }
 
-const map_palette = [
-    "#17577e",
-    "#3d6c42",
-    "#3f6e42",
-    "#477340",
-    "#527b3e",
-    "#61853b",
-    "#729038",
-    "#8fa433",
-    "#afba2d",
-    "#b8c02b",
-    "#a9a62a",
-    "#8d7329",
-    "#754727",
-    "#6b3527",
-    "#83564a",
-    "#c3ada7"
+const map_palette_init = [
+    [ 23,  87, 126], //"#17577e"
+    [ 61, 108,  66], //"#3d6c42"
+    [ 63, 110,  66], //"#3f6e42"
+    [ 71, 115,  64], //"#477340"
+    [ 82, 123,  62], //"#527b3e"
+    [ 97, 133,  59], //"#61853b"
+    [114, 144,  56], //"#729038"
+    [143, 164,  51], //"#8fa433"
+    [175, 186,  45], //"#afba2d"
+    [184, 192,  43], //"#b8c02b"
+    [169, 166,  42], //"#a9a62a"
+    [141, 115,  41], //"#8d7329"
+    [117,  71,  39], //"#754727"
+    [107,  53,  39], //"#6b3527"
+    [131,  86,  74], //"#83564a"
+    [195, 173, 167]  //"#c3ada7"
 ]
-module.exports.map_palette = map_palette
 
+function rgb_to_string(rgb, change) {
+    if (
+        Number.isInteger(change)
+        && change >= -255
+        && change <= 255
+    ) {
+        rgb = rgb.map( value => value + change >= 0 ? value + change : 0)
+    }
+    return "rgb(" + rgb.join(",") + ")"
+}
+const map_palette = map_palette_init.map(
+    rgb_value => rgb_to_string(rgb_value)
+)
+const map_palette_dark = map_palette_init.map(
+    rgb_value => rgb_to_string(rgb_value, -30)
+)
+module.exports.map_palette = map_palette
+module.exports.map_palette_dark = map_palette_dark
+
+console.log("palettes", map_palette, map_palette_dark)
 
 // also see https://www.compart.com/en/unicode/block/U+1F700 for symbols for ores
 const icons = {

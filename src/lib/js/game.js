@@ -28,10 +28,9 @@ require("mini.css/dist/mini-nord.css")
 require("Style/main.css")
 
 store.tiles = init_tiles()
+store.sprites = make_sprites()
 
 window.onload = function() {
-
-    store.sprites = make_sprites()
 // SEEME TODO
 // http://nokarma.org/2011/02/02/javascript-game-development-the-game-loop/index.html
 // https://developer.mozilla.org/en-US/docs/Games/Anatomy
@@ -160,12 +159,13 @@ function init_units(my_store) {
 }
 
 function keyboard_actions(my_store, game_state) {
+
+    const move_keys = init_keyboard_shortcuts(my_store);
     return function (e) {
         if (my_store.game_state.paused === true ) {
             return false
         }
 
-        const move_keys = init_keyboard_shortcuts(my_store);
         if (e.key in move_keys) {
             move_keys[e.key]()
             e.preventDefault()

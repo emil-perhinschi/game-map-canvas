@@ -5,14 +5,14 @@ import { world_map_draw } from "motor.js"
 
 function init_keyboard_shortcuts(my_store) {
     return {
-        "ArrowUp":    () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "N"),
-        "ArrowDown":  () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "S"),
-        "ArrowLeft":  () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "W"),
-        "ArrowRight": () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "E"),
-        "PageUp":     () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "NE"),
-        "Home":       () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "NW"),
-        "PageDown":   () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "SE"),
-        "End":        () => my_store[my_store.selected_entity.type][my_store.selected_entity.id].move(my_store, "SW"),
+        "ArrowUp":    () => my_store.selected().move(my_store, "N"),
+        "ArrowDown":  () => my_store.selected().move(my_store, "S"),
+        "ArrowLeft":  () => my_store.selected().move(my_store, "W"),
+        "ArrowRight": () => my_store.selected().move(my_store, "E"),
+        "PageUp":     () => my_store.selected().move(my_store, "NE"),
+        "Home":       () => my_store.selected().move(my_store, "NW"),
+        "PageDown":   () => my_store.selected().move(my_store, "SE"),
+        "End":        () => my_store.selected().move(my_store, "SW"),
 
         "c": function () {
             viewport_center(
@@ -20,6 +20,7 @@ function init_keyboard_shortcuts(my_store) {
                 my_store.units[my_store.selected_entity.id].x,
                 my_store.units[my_store.selected_entity.id].y
             )
+            my_store.redraw_all()
         }
     }
 }
@@ -182,6 +183,7 @@ function build_entity_list_item(store, entity_type, entity, selected_entity_id) 
             .classList.add("selected_" + entity_type + "_selector")
 
         viewport_center(store, entity.x, entity.y)
+        store.redraw_all()
     }
 
     el_container.appendChild(el)

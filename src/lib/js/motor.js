@@ -2,7 +2,7 @@
 
 import { viewport_center } from 'Viewport.js'
 import { map_data, fetch_data, update, tile_is_visible } from 'mock_server_data.js'
-import { map_palette, debug_info } from 'globals.js'
+import { map_palette, map_palette_dark, debug_info } from 'globals.js'
 
 function game_tick(ctx, store, game_state) {
     store.turn_no += 1
@@ -217,7 +217,19 @@ function draw_viewport( ctx, store, map_data) {
             }
 
             const terrain_type = map_data[y][x]
-            ctx.fillStyle = map_palette[terrain_type]
+
+            const is_visible = tile_is_visible(
+                store,
+                // make x and y absolute values, same as entity.x and entity.y
+                x + store.viewport_offset_x,
+                y + store.viewport_offset_y
+            )
+
+            if (is_visible === true) {
+                ctx.fillStyle = map_palette[terrain_type]
+            } else {
+                ctx.fillStyle = map_palette_dark[terrain_type]
+            }
 
             ctx.fillRect(
                 x * store.tile_width,
@@ -226,39 +238,16 @@ function draw_viewport( ctx, store, map_data) {
                 store.tile_height
             )
 
-            if (store.tiles[terrain_type] === undefined ) {
-                continue
+            if (store.tiles[terrain_type] !== undefined && is_visible ) {
+                if (map_data[y][x] > 0 || map_data[y][x] <= 8) {
+                    // have tiles for these terrains
+                    ctx.drawImage(
+                        store.tiles[terrain_type][0].cloneNode(),
+                        x * store.tile_width,
+                        y * store.tile_height
+                    )
+                }
             }
-
-            if (map_data[y][x] = 0 || map_data[y][x] > 8) {
-                // no tiles for these terrains
-                continue
-            }
-
-            let img = null
-            const is_visible = tile_is_visible(
-                store,
-                // make x and y absolute values, same as entity.x and entity.y
-                x + store.viewport_offset_x,
-                y + store.viewport_offset_y
-            )
-
-            img = store.tiles[terrain_type][0].cloneNode()
-            ctx.drawImage(
-                img,
-                x * store.tile_width,
-                y * store.tile_height
-            )
-            if ( !is_visible ) {
-                ctx.drawImage(
-                    store.sprites.fog_of_war,
-                    x * store.tile_width,
-                    y * store.tile_height
-                )
-            }
-
-
-
         }
     }
 }

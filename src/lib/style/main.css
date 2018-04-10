@@ -33,7 +33,7 @@
     height: 600px;
 }
 
-#context_info {
+#entities_info {
     width: 400px;
     grid-column: 3;
     grid-row: 2;
