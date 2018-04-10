@@ -53,38 +53,8 @@ class Entity {
     }
 
     move(store, direction) {
-        const can_N = (store, x,y) => y > 0
-        const can_S = (store, x,y) => y < ( store.world_map_height - 1 )
-        const can_E = (store, x,y) => x < ( store.world_map_width  - 1 )
-        const can_W = (store, x,y) => x > 0
-
         // store the new values before checking if movement is possible
-        const move_directions = {
-            "N": function(store,x,y) { if ( can_N(store,x,y) ) return [ x, y - 1 ] },
-            "S": function(store,x,y) { if ( can_S(store,x,y) ) return [ x, y + 1 ] },
-            "E": function(store,x,y) { if ( can_E(store,x,y) ) return [ x + 1, y ] },
-            "W": function(store,x,y) { if ( can_W(store,x,y) ) return [ x - 1, y ] },
-            "NE": function(store,x,y) {
-                if ( can_N(store,x,y) && can_E(store,x,y) ) {
-                    return [ x + 1, y - 1]
-                }
-            },
-            "NW": function(store,x,y) {
-                if ( can_N(store,x,y) && can_W(store,x,y) ) {
-                    return [ x - 1, y - 1]
-                }
-            },
-            "SE": function(store,x,y) {
-                if ( can_S(store,x,y) && can_E(store,x,y) ) {
-                    return [ x + 1, y + 1]
-                }
-            },
-            "SW": function(store,x,y) {
-                if ( can_S(store,x,y) && can_W(store,x,y) ) {
-                    return [ x - 1, y + 1 ]
-                }
-            }
-        }
+        const move_directions = this.directions_dispatch_map(store)
 
         if(!direction in move_directions) {
             throw "Direction " + direction + " not valid"
@@ -98,6 +68,7 @@ class Entity {
             if (store.center_on_move === true) {
                 viewport_center(store, new_x, new_y)
             }
+            store.execute_turn()
         } else {
             ui_msg( "cannot move there: " + can_move.reason )
         }
@@ -182,7 +153,42 @@ class Entity {
         }
     }
 
+    // TODO maybe move this outside ? does not need state
+    directions_dispatch_map(store, x, y) {
+        const can_N = (store, x,y) => y > 0
+        const can_S = (store, x,y) => y < ( store.world_map_height - 1 )
+        const can_E = (store, x,y) => x < ( store.world_map_width  - 1 )
+        const can_W = (store, x,y) => x > 0
 
+        const dispatch_map = {
+            "N": function(store,x,y) { if ( can_N(store,x,y) ) return [ x, y - 1 ] },
+            "S": function(store,x,y) { if ( can_S(store,x,y) ) return [ x, y + 1 ] },
+            "E": function(store,x,y) { if ( can_E(store,x,y) ) return [ x + 1, y ] },
+            "W": function(store,x,y) { if ( can_W(store,x,y) ) return [ x - 1, y ] },
+            "NE": function(store,x,y) {
+                if ( can_N(store,x,y) && can_E(store,x,y) ) {
+                    return [ x + 1, y - 1]
+                }
+            },
+            "NW": function(store,x,y) {
+                if ( can_N(store,x,y) && can_W(store,x,y) ) {
+                    return [ x - 1, y - 1]
+                }
+            },
+            "SE": function(store,x,y) {
+                if ( can_S(store,x,y) && can_E(store,x,y) ) {
+                    return [ x + 1, y + 1]
+                }
+            },
+            "SW": function(store,x,y) {
+                if ( can_S(store,x,y) && can_W(store,x,y) ) {
+                    return [ x - 1, y + 1 ]
+                }
+            }
+        }
+
+        return dispatch_map
+    }
 }
 
 export { Entity }

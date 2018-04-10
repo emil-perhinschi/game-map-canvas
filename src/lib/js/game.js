@@ -27,14 +27,17 @@ import { viewport_center } from 'Viewport.js'
 require("mini.css/dist/mini-nord.css")
 require("Style/main.css")
 
-store.sprites = make_sprites()
+store.tiles = init_tiles()
 
 window.onload = function() {
 
+    store.sprites = make_sprites()
 // SEEME TODO
 // http://nokarma.org/2011/02/02/javascript-game-development-the-game-loop/index.html
 // https://developer.mozilla.org/en-US/docs/Games/Anatomy
+// https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas
 
+    document.getElementById('map_container').focus()
     const ctx_viewport = document.getElementById('game')
                             .getContext("2d", { alpha: false })
 
@@ -53,12 +56,24 @@ window.onload = function() {
     world_map_draw(store)
     init_world_map_events(store, "world_map_canvas")
 
-    const tiles = init_tiles()
-    game_tick(ctx_viewport, store, game_state, tiles)
 
+
+    store.execute_turn = function() {
+        window.requestAnimationFrame(
+            () => game_tick(ctx_viewport, store, game_state)
+        )
+    }
+
+    store.execute_turn()
     // will get here, the next tick is called via setTimeout
-    document.getElementById('map_container').focus()
+
 }
+
+
+function game_loop() {
+
+}
+
 
 function init_world_map_events(store, world_map_canvas_id) {
     const canvas = document.getElementById("world_map_canvas")
@@ -148,7 +163,7 @@ function init_units(my_store) {
 
 function keyboard_actions(my_store, game_state) {
     return function (e) {
-        if (game_state.paused === true ) {
+        if (my_store.game_state.paused === true ) {
             return false
         }
 
@@ -173,13 +188,25 @@ window.ui_msg = function (...args) {
 }
 
 function make_sprites() {
+    const fort = new Image()
+    fort.src = 'sprites/fort_topdown.png'
+
+    const unit = new Image()
+    unit.src = 'sprites/unit_topdown.png'
+
     const shield = new Image(64,64)
     shield.src = 'sprites/blank_shield.png'
 
     const cart = new Image(64,64)
     cart.src = 'sprites/small_cart.png'
 
+    const fog_of_war = new Image()
+    fog_of_war.src = 'sprites/fog_of_war.png'
+
     return {
+        "fog_of_war": fog_of_war,
+        "town": fort,
+        "unit": unit,
         "shield": shield,
         "cart": cart
     }
@@ -187,6 +214,10 @@ function make_sprites() {
 
 
 function init_tiles() {
+
+    //TODO: use a canvas element to combine image and create the final tiles
+    // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas
+
     const tiles = new Array()
     tiles[1] = new Array()
     tiles[1][0] = new Image()

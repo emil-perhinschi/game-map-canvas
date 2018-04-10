@@ -26,10 +26,9 @@ class Unit extends Entity {
         } else {
             ctx.fillStyle = "red"
         }
-        const img = new Image()
-        img.src = 'sprites/unit_topdown.png'
+
         ctx.drawImage(
-            img,
+            store.sprites.unit,
             draw_coords.x,
             draw_coords.y
         )

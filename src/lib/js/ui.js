@@ -29,13 +29,14 @@ function init_ui_button_actions(window, my_store, game_state) {
 
     window.game_load = (id) => game_load(my_store, id)
     window.game_save = (id) => game_save(my_store, id)
-    window.game_start = () => game_start(game_state)
-    window.game_stop = () => game_stop(game_state)
-    window.game_pause = () => game_pause(game_state)
+    window.game_start = () => game_start(my_store.game_state)
+    window.game_stop = () => game_stop(my_store.game_state)
+    window.game_pause = () => game_pause(my_store.game_state)
     window.game_reset = () => game_reset()
     window.saves_list = () => saves_list()
     window.zoom_out = () => zoom_out(my_store)
     window.zoom_in = () => zoom_in(my_store)
+    window.next_turn = () => next_turn(my_store)
 }
 
 function zoom_in(my_store) {
@@ -57,6 +58,9 @@ function zoom_out(my_store) {
     world_map_draw(my_store)
 }
 
+function next_turn(my_store) {
+    my_store.execute_turn()
+}
 
 function saves_list() {
     const saves_list = JSON.parse(localStorage.getItem(saves_list_name))

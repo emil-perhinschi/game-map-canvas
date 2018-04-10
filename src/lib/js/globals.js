@@ -42,16 +42,18 @@ module.exports.store = {
     "on_move" : function() {
         throw( new Error("no on_move action was set in globals") )
     },
-    "visibility_distance": 3
+    "visibility_distance": 3,
+    "game_state": {
+        "paused": false
+    },
+    "execute_turn": undefined, // will be initialized with a function
+    "turn_no": 0
 }
 
 module.exports.debug_info = {
     "show": true
 }
 
-module.exports.game_state = {
-    "paused": false
-}
 const map_palette = [
     "#17577e",
     "#3d6c42",

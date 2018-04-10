@@ -4,7 +4,8 @@ import { viewport_center } from 'Viewport.js'
 import { map_data, fetch_data, update, tile_is_visible } from 'mock_server_data.js'
 import { map_palette, debug_info } from 'globals.js'
 
-function game_tick(ctx, store, game_state, tiles) {
+function game_tick(ctx, store, game_state) {
+    store.turn_no += 1
 
     if (store.pointer === null ) {
         const selected_entity_type = store.selected_entity.type
@@ -24,27 +25,28 @@ function game_tick(ctx, store, game_state, tiles) {
         store.viewport_height
     )
 
-    draw_viewport(ctx, store, viewport_map_data, tiles)
-    draw_units(ctx, store)
+    draw_viewport(ctx, store, viewport_map_data)
+    draw_debug_info(ctx, store)
     draw_towns(ctx, store)
+    draw_units(ctx, store)
 
-    if ( game_state.paused === true ) {
-        ui_msg("game paused")
-        // check every second if the game was unpaused
-        game_paused_check(ctx, store, game_state)
-    } else {
-        draw_debug_info(ctx, store)
-        setTimeout(
-            function() {
-                window.requestAnimationFrame(
-                    function() {
-                        game_tick(ctx, store, game_state, tiles)
-                    }
-                )
-            },
-            Math.ceil(1000/store.max_fps)
-        )
-    }
+    // if ( game_state.paused === true ) {
+    //     ui_msg("game paused")
+    //     // check every second if the game was unpaused
+    //     game_paused_check(ctx, store, game_state)
+    // } else {
+    //     draw_debug_info(ctx, store)
+    //     setTimeout(
+    //         function() {
+                // window.requestAnimationFrame(
+                //     function() {
+                //         store.execute_turn()
+                //     }
+                // )
+    //         },
+    //         Math.ceil(1000/store.max_fps)
+    //     )
+    // }
 }
 
 function game_paused_check(ctx, store, game_state) {
@@ -69,7 +71,7 @@ function game_paused_check(ctx, store, game_state) {
 
 function draw_debug_info( ctx, store) {
     if (debug_info.show === true) {
-        draw_fps(ctx, store)
+        draw_turn_no(ctx, store)
         draw_viewport_info(ctx, store)
         draw_selected_entity_info(ctx, store)
         draw_diagonals(ctx, store)
@@ -117,7 +119,7 @@ function draw_selected_entity_info(ctx, store) {
     const selected_entity_type = store.selected_entity.type
     const selected_entity = store[selected_entity_type][store.selected_entity.id]
     ctx.fillStyle = "#000000"
-    ctx.font = "20px Arial";
+    ctx.font = "20px Arial"
     ctx.fillText(
         "Selected " + selected_entity_type + " is at: "
             + selected_entity.x
@@ -127,26 +129,32 @@ function draw_selected_entity_info(ctx, store) {
     )
 }
 
+function draw_turn_no(ctx, store) {
+    ctx.fillStyle = "#000000"
+    ctx.font = "20px Arial"
+    ctx.fillText("Turn no.: " + store.turn_no, 10, 20)
+}
+
 function draw_fps(ctx, store) {
-    const time = Date.now();
-    const sec = Math.floor( time / 1000 );
+    const time = Date.now()
+    const sec = Math.floor( time / 1000 )
     if ( sec != store.frames.current_second ) {
-        store.frames.current_second = sec;
-        store.frames.frames_last_second = store.frames.frame_count;
-        store.frames.frame_count = 1;
+        store.frames.current_second = sec
+        store.frames.frames_last_second = store.frames.frame_count
+        store.frames.frame_count = 1
     } else {
-        store.frames.frame_count++;
+        store.frames.frame_count++
     }
 
-    ctx.fillStyle = "#000000";
-    ctx.font = "20px Arial";
-    ctx.fillText("FPS: " + store.frames.frames_last_second, 10, 20);
+    ctx.fillStyle = "#000000"
+    ctx.font = "20px Arial"
+    ctx.fillText("FPS: " + store.frames.frames_last_second, 10, 20)
 }
 
 
 function draw_viewport_info(ctx, store) {
-    ctx.fillStyle = "#000000";
-    ctx.font = "20px Arial";
+    ctx.fillStyle = "#000000"
+    ctx.font = "20px Arial"
     ctx.fillText(
         "Offset: "
             + store.viewport_offset_x
@@ -159,7 +167,7 @@ function draw_viewport_info(ctx, store) {
 
 function draw_diagonals(ctx, store) {
 
-    ctx.fillStyle = "#ff0000";
+    ctx.fillStyle = "#ff0000"
 
     ctx.beginPath()
     ctx.moveTo(0,0)
@@ -188,9 +196,9 @@ function get_selected_entity(store, map_data) {
 }
 
 
-function draw_viewport( ctx, store, map_data, tiles) {
+function draw_viewport( ctx, store, map_data) {
 
-    if ( ctx == null) { return; }
+    if ( ctx == null) { return }
 
     const entity = get_selected_entity(store, map_data)
 
@@ -218,7 +226,7 @@ function draw_viewport( ctx, store, map_data, tiles) {
                 store.tile_height
             )
 
-            if (tiles[terrain_type] === undefined ) {
+            if (store.tiles[terrain_type] === undefined ) {
                 continue
             }
 
@@ -234,17 +242,22 @@ function draw_viewport( ctx, store, map_data, tiles) {
                 x + store.viewport_offset_x,
                 y + store.viewport_offset_y
             )
-            if ( is_visible ) {
-                img = tiles[terrain_type][0].cloneNode()
-            } else {
-                img = tiles[terrain_type][1].cloneNode()
-            }
 
+            img = store.tiles[terrain_type][0].cloneNode()
             ctx.drawImage(
                 img,
                 x * store.tile_width,
                 y * store.tile_height
             )
+            if ( !is_visible ) {
+                ctx.drawImage(
+                    store.sprites.fog_of_war,
+                    x * store.tile_width,
+                    y * store.tile_height
+                )
+            }
+
+
 
         }
     }

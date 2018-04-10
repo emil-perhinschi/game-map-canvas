@@ -6,7 +6,7 @@ class Town extends Entity {
     constructor(id, x, y) {
         super(id, x, y)
         this.color_code = "#000000"
-        this.icon = '𓉤'
+
         // SEEME: what is the point of this ? need better solution
         this.entity_type = Town.type()
         this.friendly = true
@@ -32,10 +32,9 @@ class Town extends Entity {
         } else {
             ctx.fillStyle = "red"
         }
-        const img = new Image()
-        img.src = 'sprites/fort_topdown.png'
+
         ctx.drawImage(
-            img,
+            store.sprites.town,
             draw_coords.x,
             draw_coords.y
         )
