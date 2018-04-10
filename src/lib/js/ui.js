@@ -59,7 +59,7 @@ function zoom_out(my_store) {
 }
 
 function next_turn(my_store) {
-    my_store.execute_turn()
+    my_store.redraw_all()
 }
 
 function saves_list() {

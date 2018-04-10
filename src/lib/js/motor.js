@@ -40,7 +40,7 @@ function game_tick(ctx, store, game_state) {
     //         function() {
                 // window.requestAnimationFrame(
                 //     function() {
-                //         store.execute_turn()
+                //         store.redraw_all()
                 //     }
                 // )
     //         },
@@ -130,7 +130,7 @@ function draw_selected_entity_info(ctx, store) {
 }
 
 function draw_turn_no(ctx, store) {
-    ctx.fillStyle = "#000000"
+    ctx.fillStyle = "#aaaaaa"
     ctx.font = "20px Arial"
     ctx.fillText("Turn no.: " + store.turn_no, 10, 20)
 }
@@ -371,7 +371,6 @@ function world_map_draw(store) {
             }
         }
     )
-
 }
 
 export { game_tick, world_map_draw, world_map_viewport_details }

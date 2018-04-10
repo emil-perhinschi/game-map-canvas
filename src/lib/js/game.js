@@ -58,15 +58,13 @@ window.onload = function() {
 
 
 
-    store.execute_turn = function() {
+    store.redraw_all = function() {
         window.requestAnimationFrame(
             () => game_tick(ctx_viewport, store, game_state)
         )
     }
 
-    store.execute_turn()
-    // will get here, the next tick is called via setTimeout
-
+    store.redraw_all()
 }
 
 
@@ -105,7 +103,7 @@ function init_world_map_events(store, world_map_canvas_id) {
                     store.pointer.x,
                     store.pointer.y
                 )
-
+                store.redraw_all()
                 e.preventDefault()
                 e.stopPropagation()
             },

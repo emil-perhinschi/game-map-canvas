@@ -118,12 +118,17 @@ function unit_can_see_tile(unit, max_distance, tile_x, tile_y) {
     const y_distance = Math.abs( tile_y - unit.y )
 
     if ( // first do the cheap computations
-        x_distance > 3 || y_distance > 3
+        x_distance > max_distance || y_distance > max_distance
     ) {
         return false
     } else {
         if (
-            Math.sqrt( Math.pow(x_distance, 2) + Math.pow(y_distance, 2) ) > 3
+            Math.floor(
+                Math.sqrt(
+                    Math.pow(x_distance, 2)
+                    + Math.pow(y_distance, 2)
+                )
+            ) > 3
         ) {
             return false
         } else {

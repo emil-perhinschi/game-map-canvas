@@ -46,7 +46,7 @@ module.exports.store = {
     "game_state": {
         "paused": false
     },
-    "execute_turn": undefined, // will be initialized with a function
+    "redraw_all": undefined, // will be initialized with a function
     "turn_no": 0
 }
 

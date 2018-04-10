@@ -29,7 +29,6 @@ function viewport_center(store, x, y) {
             : y_new
 
     world_map_draw(store)
-    store.execute_turn()
 }
 
 export { Viewport, viewport_center }
