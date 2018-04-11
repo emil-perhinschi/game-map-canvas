@@ -4,10 +4,10 @@ import { viewport_center } from 'Viewport.js'
 import { map_data, fetch_data, update, tile_is_visible } from 'mock_server_data.js'
 import { map_palette, map_palette_dark, debug_info } from 'globals.js'
 
-function game_tick(ctx, store, game_state) {
+function game_tick(ctx, store) {
     store.turn_no += 1
-
-    if (store.pointer === null ) {
+    console.log(store.pointer)
+    if ( store.pointer === null ) {
         const selected_entity_type = store.selected_entity.type
         const selected_entity = store[selected_entity_type][store.selected_entity.id]
 
@@ -40,7 +40,7 @@ function game_tick(ctx, store, game_state) {
     //         function() {
                 // window.requestAnimationFrame(
                 //     function() {
-                //         store.redraw_all()
+                //         window.redraw_all()
                 //     }
                 // )
     //         },

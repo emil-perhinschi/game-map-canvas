@@ -19,7 +19,7 @@ import {
     build_entities_list,
     remove_selection_mark_from_previously_selected_unit
 } from 'ui.js'
-import { store, game_state } from 'globals.js'
+import { store } from 'globals.js'
 import utils from 'misc_not_mine.js'
 import { now_formatted } from 'util.js'
 import { viewport_center } from 'Viewport.js'
@@ -40,8 +40,8 @@ window.onload = function() {
     const ctx_viewport = document.getElementById('game')
                             .getContext("2d", { alpha: false })
 
-    document.onkeydown = keyboard_actions(store, game_state)
-    init_ui_button_actions(window, store, game_state)
+    document.onkeydown = keyboard_actions(store)
+    init_ui_button_actions(window, store)
 
     store.units = init_units(store)
     build_entities_list("units_list", store, "units", store.selected_entity.id )
@@ -54,16 +54,12 @@ window.onload = function() {
 
     world_map_draw(store)
     init_world_map_events(store, "world_map_canvas")
-
-
-
-    store.redraw_all = function() {
-        window.requestAnimationFrame(
-            () => game_tick(ctx_viewport, store, game_state)
-        )
+    // TODO I hate globals, and this is a global
+    window.redraw_all = function () {
+            game_tick(ctx_viewport, store)
     }
 
-    store.redraw_all()
+    window.redraw_all()
 }
 
 
@@ -96,13 +92,15 @@ function init_world_map_events(store, world_map_canvas_id) {
                     Math.floor(x) + offset.x,
                     Math.floor(y) + offset.y
                 )
-
+                console.log("=================")
+                console.log(store.pointer)
+                console.log("=================")
                 viewport_center(
                     store,
                     store.pointer.x,
                     store.pointer.y
                 )
-                store.redraw_all()
+                window.redraw_all()
                 e.preventDefault()
                 e.stopPropagation()
             },
@@ -158,7 +156,7 @@ function init_units(my_store) {
     return units;
 }
 
-function keyboard_actions(my_store, game_state) {
+function keyboard_actions(my_store) {
 
     const move_keys = init_keyboard_shortcuts(my_store);
     return function (e) {

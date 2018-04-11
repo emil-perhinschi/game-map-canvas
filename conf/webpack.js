@@ -1,15 +1,18 @@
 'use strict'
+
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
+
 const path = require('path')
-const store  = require("./../src/lib/js/globals.js").store
+const map_defaults  = require("./../src/lib/js/map_defaults.js").map_defaults
+
 const fs = require('fs')
 const read_image_to_map = require('./../src/lib/js/map_converter.js').read_image_to_map
 
 const map_image_path = path.resolve(
     __dirname
-    + "/../src/assets/static/1600x1600_v2.pgm"
+    + "/../assets/static/1600x1600_v2.pgm"
 )
 
 const map_data = read_image_to_map(
@@ -45,7 +48,7 @@ const web_config = {
     plugins: [
         new CopyWebpackPlugin([
             {
-                from: "src/assets/static/sprites/*.png",
+                from: "assets/static/sprites/*.png",
                 to: 'sprites/',
                 flatten: true
             },
@@ -56,14 +59,14 @@ const web_config = {
         ]),
         new HtmlWebpackPlugin({
             title: 'My Map v.0.1.2',
-            template: path.resolve(__dirname + '/../src/assets/index.html'),
+            template: path.resolve(__dirname + '/../assets/index.html'),
             inject: true,
-            world_map_width:  store.world_map_width,
-            world_map_height: store.world_map_height,
-            full_map_width:  store.full_map_width,
-            full_map_height: store.full_map_height,
-            viewport_width:  (store.viewport_width * store.tile_width),
-            viewport_height: (store.viewport_height * store.tile_height)
+            world_map_width:  map_defaults.world_map_width,
+            world_map_height: map_defaults.world_map_height,
+            full_map_width:   map_defaults.full_map_width,
+            full_map_height:  map_defaults.full_map_height,
+            viewport_width:  (map_defaults.viewport_width * map_defaults.tile_width),
+            viewport_height: (map_defaults.viewport_height * map_defaults.tile_height)
         })
     ],
     module: {
@@ -78,6 +81,11 @@ const web_config = {
             {
                 test:/\.scss$/,
                 use:['style-loader','css-loader', 'sass-loader']
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: ['eslint-loader']
             }
         ]
     }

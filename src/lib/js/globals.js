@@ -1,57 +1,7 @@
 'use strict';
 
-const frames = {
-    "current_second": 0,
-    "frame_count": 0,
-    "frames_last_second": 0
-}
-
-// ... need to replace this, can't make it const
-module.exports.store = {
-    "center_on_move": false,
-    "sprites": {},
-    "frames": frames,
-    "max_fps": 5,
-    "tile_width": 64,
-    "tile_height": 64,
-    "viewport_offset_x": 0,
-    "viewport_offset_y": 0,
-    "viewport_width": 13,// in tiles
-    "viewport_height": 13,// in tiles
-    "full_map_width": 600,// in tiles
-    "full_map_height": 600,// in tiles
-    "world_map_canvas_id": "world_map_canvas",
-    "world_map_width": 1600,// in tiles
-    "world_map_height": 1600, // in tiles
-    "world_map_container_width": 600, // in pixels
-    "world_map_container_height": 600, // in pixels
-    "world_map_zoom": 2, // how many pixels per tile in the world map container
-    "units": [],
-    "towns": [],
-    // use when clicking on the world map to pan around
-    //   if not null then the user clicked on the world map and the viewport
-    //   should center on that point
-    "pointer": null,
-    "selected_entity": {
-        "id" : 0,
-        // valid types so far:
-        //    units: when a unit is selected
-        //    towns: when selecting a town
-        "type" : "units" // by default the first unit is selected
-    },
-    "selected": function() {
-        return this[this.selected_entity.type][this.selected_entity.id]
-    },
-    "on_move" : function() {
-        throw( new Error("no on_move action was set in globals") )
-    },
-    "visibility_distance": 3,
-    "game_state": {
-        "paused": false
-    },
-    "redraw_all": undefined, // will be initialized with a function
-    "turn_no": 0
-}
+const GameState = require('GameState.js').GameState
+module.exports.store = new GameState()
 
 module.exports.debug_info = {
     "show": true
@@ -86,16 +36,17 @@ function rgb_to_string(rgb, change) {
     }
     return "rgb(" + rgb.join(",") + ")"
 }
+
 const map_palette = map_palette_init.map(
     rgb_value => rgb_to_string(rgb_value)
 )
+
 const map_palette_dark = map_palette_init.map(
     rgb_value => rgb_to_string(rgb_value, -30)
 )
+
 module.exports.map_palette = map_palette
 module.exports.map_palette_dark = map_palette_dark
-
-console.log("palettes", map_palette, map_palette_dark)
 
 // also see https://www.compart.com/en/unicode/block/U+1F700 for symbols for ores
 const icons = {

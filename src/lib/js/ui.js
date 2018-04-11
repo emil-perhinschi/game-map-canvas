@@ -1,7 +1,8 @@
 'use strict'
 
-import { viewport_center } from 'Viewport.js'
+import { viewport_center } from "Viewport.js"
 import { world_map_draw } from "motor.js"
+import { GameState } from "GameState.js"
 
 function init_keyboard_shortcuts(my_store) {
     return {
@@ -20,7 +21,7 @@ function init_keyboard_shortcuts(my_store) {
                 my_store.units[my_store.selected_entity.id].x,
                 my_store.units[my_store.selected_entity.id].y
             )
-            my_store.redraw_all()
+            window.redraw_all()
         }
     }
 }
@@ -60,7 +61,7 @@ function zoom_out(my_store) {
 }
 
 function next_turn(my_store) {
-    my_store.redraw_all()
+    window.redraw_all()
 }
 
 function saves_list() {
@@ -69,8 +70,11 @@ function saves_list() {
 }
 
 function game_load(my_store, id) {
-    my_store = JSON.parse(localStorage.getItem("save_game_" + String(id)));
-    ui_msg("loading " + 1, my_store)
+    const saved_store = JSON.parse(localStorage.getItem("save_game_" + String(id)));
+    ui_msg("loading " + 1)
+    my_store = new GameState(saved_store)
+    window.redraw_all()
+
 }
 
 function game_save(my_store, id) {
@@ -183,7 +187,7 @@ function build_entity_list_item(store, entity_type, entity, selected_entity_id) 
             .classList.add("selected_" + entity_type + "_selector")
 
         viewport_center(store, entity.x, entity.y)
-        store.redraw_all()
+        window.redraw_all()
     }
 
     el_container.appendChild(el)

@@ -68,7 +68,7 @@ class Entity {
             if (store.center_on_move === true) {
                 viewport_center(store, new_x, new_y)
             }
-            store.redraw_all()
+            window.redraw_all()
         } else {
             ui_msg( "cannot move there: " + can_move.reason )
         }
